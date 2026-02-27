@@ -4,16 +4,12 @@ from flask import Blueprint, jsonify, request
 from sqlalchemy import text
 from .db import get_db
 
-main = Blueprint("main", __name__)
+api = Blueprint("api", __name__, url_prefix="/api")
 
 # -----------------------------------
-# Test route
+# Health check
 # -----------------------------------
-@main.route("/")
-def home():
-    return "Dublin Bike Scheme App Running"
-
-@main.route("/api/health")
+@api.get("/health")
 def health():
     return jsonify({"status": "ok"})
 
@@ -21,7 +17,7 @@ def health():
 # -----------------------------------
 # STORED BIKES (From Database)
 # -----------------------------------
-@main.route("/api/stored/bikes")
+@api.get("/stored/bikes")
 def stored_bikes():
     engine = get_db()
 
@@ -60,7 +56,7 @@ def stored_bikes():
 # -----------------------------------
 # STORED WEATHER - CURRENT
 # -----------------------------------
-@main.route("/api/stored/weather/current")
+@api.get("/stored/weather/current")
 def stored_weather_current():
     engine = get_db()
 
@@ -78,7 +74,7 @@ def stored_weather_current():
 # -----------------------------------
 # STORED WEATHER - HOURLY
 # -----------------------------------
-@main.route("/api/stored/weather/hourly")
+@api.get("/stored/weather/hourly")
 def stored_weather_hourly():
     engine = get_db()
     limit = request.args.get("limit", default=12, type=int)
@@ -97,7 +93,7 @@ def stored_weather_hourly():
 # -----------------------------------
 # STORED WEATHER - DAILY
 # -----------------------------------
-@main.route("/api/stored/weather/daily")
+@api.get("/stored/weather/daily")
 def stored_weather_daily():
     engine = get_db()
     limit = request.args.get("limit", default=7, type=int)
@@ -116,7 +112,7 @@ def stored_weather_daily():
 # -----------------------------------
 # LIVE BIKES (JCDECAUX)
 # -----------------------------------
-@main.route("/api/live/bikes")
+@api.get("/live/bikes")
 def live_bikes():
     api_key = os.getenv("JCDECAUX_API_KEY")
     contract = os.getenv("JCDECAUX_CONTRACT", "dublin")
@@ -127,14 +123,13 @@ def live_bikes():
     url = "https://api.jcdecaux.com/vls/v1/stations"
     r = requests.get(url, params={"apiKey": api_key, "contract": contract}, timeout=15)
     r.raise_for_status()
-
     return jsonify(r.json())
 
 
 # -----------------------------------
 # LIVE WEATHER
 # -----------------------------------
-@main.route("/api/live/weather")
+@api.get("/live/weather")
 def live_weather():
     api_key = os.getenv("OPENWEATHER_API_KEY")
     city = os.getenv("OPENWEATHER_CITY", "Dublin,IE")
@@ -145,5 +140,4 @@ def live_weather():
     url = "https://api.openweathermap.org/data/2.5/weather"
     r = requests.get(url, params={"q": city, "appid": api_key, "units": "metric"}, timeout=15)
     r.raise_for_status()
-
     return jsonify(r.json())
