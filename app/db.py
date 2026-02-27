@@ -1,4 +1,13 @@
-# app/db.py
+"""
+IMPORTANT:
+This application requires a DATABASE_URL environment variable.
+
+Format:
+mysql+pymysql://USERNAME:PASSWORD@127.0.0.1:3306/DATABASE_NAME
+
+Each team member must configure this locally.
+On EC2, this must be set as an environment variable.
+"""
 
 import os
 from flask import g, current_app
