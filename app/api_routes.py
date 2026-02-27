@@ -49,7 +49,8 @@ def stored_bikes():
         ON s.station_number = st.station_number;
     """)
 
-    rows = engine.execute(query).fetchall()
+    with engine.connect() as conn:
+        rows = conn.execute(query).fetchall()
     return jsonify(stations=[dict(r._mapping) for r in rows])
 
 
@@ -67,7 +68,8 @@ def stored_weather_current():
         LIMIT 1;
     """)
 
-    row = engine.execute(query).fetchone()
+    with engine.connect() as conn:
+        rows = conn.execute(query).fetchall()
     return jsonify(current=dict(row._mapping) if row else None)
 
 
@@ -86,7 +88,8 @@ def stored_weather_hourly():
         LIMIT :limit;
     """)
 
-    rows = engine.execute(query, {"limit": limit}).fetchall()
+    with engine.connect() as conn:
+        rows = conn.execute(query, {"limit": limit}).fetchall()
     return jsonify(hourly=[dict(r._mapping) for r in rows])
 
 
@@ -105,7 +108,8 @@ def stored_weather_daily():
         LIMIT :limit;
     """)
 
-    rows = engine.execute(query, {"limit": limit}).fetchall()
+    with engine.connect() as conn:
+        rows = conn.execute(query, {"limit": limit}).fetchall()
     return jsonify(daily=[dict(r._mapping) for r in rows])
 
 
