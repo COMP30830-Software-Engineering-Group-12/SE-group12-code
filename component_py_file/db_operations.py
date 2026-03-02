@@ -38,8 +38,8 @@ def get_engine():
             db_url,
             pool_pre_ping=True,
             pool_recycle=3600,
-            pool_size=5,
-            max_overflow=10,
+            pool_size=4,
+            max_overflow=6,
         )
     return _ENGINE
 
