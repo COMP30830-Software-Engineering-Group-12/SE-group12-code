@@ -21,16 +21,31 @@ def init_db():
             COLLATE utf8mb4_0900_ai_ci;
         """))
 
+_ENGINE = None
+
+def get_engine():
+    global _ENGINE
+    if _ENGINE is None:
+        db_url = URL.create(
+            drivername="mysql+pymysql",
+            username=dbinfo.sqlusername,
+            password=dbinfo.sqlpassword,
+            host=dbinfo.sqlurl,
+            port=dbinfo.sqlport,
+            database=dbinfo.db_name,
+        )
+        _ENGINE = create_engine(
+            db_url,
+            pool_pre_ping=True,
+            pool_recycle=3600,
+            pool_size=5,
+            max_overflow=10,
+        )
+    return _ENGINE
+
 def init_bike__table():
-    db_url = URL.create(
-        drivername="mysql+pymysql",
-        username=dbinfo.sqlusername,
-        password=dbinfo.sqlpassword,
-        host=dbinfo.sqlurl,
-        port=dbinfo.sqlport,
-        database=dbinfo.db_name,
-    )
-    engine = create_engine(db_url, echo=False, pool_pre_ping=True)
+
+    engine = get_engine()
 
     with engine.begin() as conn:
         conn.execute(text("""
@@ -78,15 +93,8 @@ def insert_bike__table(data):
     """
 
     # connect to schema
-    db_url = URL.create(
-        drivername="mysql+pymysql",
-        username=dbinfo.sqlusername,
-        password=dbinfo.sqlpassword,
-        host=dbinfo.sqlurl,
-        port=dbinfo.sqlport,
-        database=dbinfo.db_name,
-    )
-    engine = create_engine(db_url, pool_pre_ping=True, echo=False)
+
+    engine = get_engine()
 
     # prepare rows
     station_rows = []
@@ -180,16 +188,7 @@ def insert_bike__table(data):
 
 def init_weather_table():
 
-    # connect to schema
-    db_url = URL.create(
-        drivername="mysql+pymysql",
-        username=dbinfo.sqlusername,
-        password=dbinfo.sqlpassword,
-        host=dbinfo.sqlurl,
-        port=dbinfo.sqlport,
-        database=dbinfo.db_name,
-    )
-    engine = create_engine(db_url, pool_pre_ping=True, echo=False)
+    engine = get_engine()
 
     with engine.begin() as conn:
         # weather_current table
@@ -293,15 +292,7 @@ def insert_weather_current_table(data: dict):
     """
 
     # connect to schema
-    db_url = URL.create(
-        drivername="mysql+pymysql",
-        username=dbinfo.sqlusername,
-        password=dbinfo.sqlpassword,
-        host=dbinfo.sqlurl,
-        port=dbinfo.sqlport,
-        database=dbinfo.db_name,
-    )
-    engine = create_engine(db_url, pool_pre_ping=True, echo=False)
+    engine = get_engine()
 
     def ts_to_utc_naive(ts: int | None) -> datetime | None:
         if ts is None:
@@ -403,15 +394,8 @@ def insert_weather_current_table(data: dict):
 
 
 def insert_weather_forecast_hourly(data: dict):
-    db_url = URL.create(
-        drivername="mysql+pymysql",
-        username=dbinfo.sqlusername,
-        password=dbinfo.sqlpassword,
-        host=dbinfo.sqlurl,
-        port=dbinfo.sqlport,
-        database=dbinfo.db_name,
-    )
-    engine = create_engine(db_url, pool_pre_ping=True, echo=False)
+
+    engine = get_engine()
 
     def ts_to_utc_naive(ts: int | None):
         if ts is None:
@@ -534,15 +518,7 @@ def insert_weather_forecast_daily(data: dict):
       - time_forecast stored as UTC naive DATETIME
     """
 
-    db_url = URL.create(
-        drivername="mysql+pymysql",
-        username=dbinfo.sqlusername,
-        password=dbinfo.sqlpassword,
-        host=dbinfo.sqlurl,
-        port=dbinfo.sqlport,
-        database=dbinfo.db_name,
-    )
-    engine = create_engine(db_url, pool_pre_ping=True, echo=False)
+    engine = get_engine()
 
     def ts_to_utc_naive(ts: int | None):
         if ts is None:
