@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dublin Bikes | Favourites</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER / NAVBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <a href="index.html" class="logo-link">
+        <img src="images/bike_logo.png" alt="Dublin Bikes Logo" class="logo-img">
+        <span class="brand-text">dublinbikes</span>
+      </a>
+    </div>
+
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="map.html">Map</a>
+      <a href="favourites.html" class="active">Favourites</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- PAGE HERO / INTRO -->
+    <section class="page-hero favourites-hero">
+      <div class="page-hero-content">
+        <p class="page-tag">Your saved stations</p>
+        <h1>Keep your most-used Dublin Bikes stations in one place</h1>
+        <p class="page-description">
+          Quickly check availability, compare conditions, and jump straight to the map
+          for the stations you use most often.
+        </p>
+      </div>
+    </section>
+
+    <!-- FILTER / SEARCH BAR -->
+    <section class="favourites-toolbar">
+      <div class="toolbar-left">
+        <h2>Favourite Stations</h2>
+        <p>Saved locations for faster daily travel</p>
+      </div>
+
+      <div class="toolbar-right">
+        <input
+          type="text"
+          class="station-search"
+          placeholder="Search favourite stations..."
+        />
+
+        <select class="station-filter">
+          <option value="">Sort by</option>
+          <option value="name">Station Name</option>
+          <option value="bikes">Bikes Available</option>
+          <option value="stands">Stands Available</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- FAVOURITES GRID -->
+    <section class="favourites-grid">
+      <article class="favourite-card">
+        <div class="card-top">
+          <div>
+            <p class="station-area">South City Centre</p>
+            <h3>Pearse Street</h3>
+            <p class="station-address">Pearse Street, Dublin</p>
+          </div>
+          <span class="station-badge">Saved</span>
+        </div>
+
+        <div class="station-stats">
+          <div class="stat-box">
+            <span class="stat-label">Bikes</span>
+            <span class="stat-value">8</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Stands</span>
+            <span class="stat-value">12</span>
+          </div>
+
+        </div>
+
+        <div class="station-meta">
+          <p><strong>Status:</strong> Good availability</p>
+          <p><strong>Best for:</strong> Commute / city centre travel</p>
+        </div>
+
+        <div class="card-actions">
+          <a href="map.html" class="btn btn-primary">View on Map</a>
+          <button class="btn btn-outline">Remove</button>
+        </div>
+      </article>
+
+      <article class="favourite-card">
+        <div class="card-top">
+          <div>
+            <p class="station-area">North Inner City</p>
+            <h3>Parnell Square North</h3>
+            <p class="station-address">20 Parnell Square N, Dublin</p>
+          </div>
+          <span class="station-badge">Saved</span>
+        </div>
+
+        <div class="station-stats">
+          <div class="stat-box">
+            <span class="stat-label">Bikes</span>
+            <span class="stat-value">6</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Stands</span>
+            <span class="stat-value">8</span>
+          </div>
+        </div>
+
+        <div class="station-meta">
+          <p><strong>Status:</strong> Moderate availability</p>
+          <p><strong>Best for:</strong> Northside access</p>
+        </div>
+
+        <div class="card-actions">
+          <a href="map.html" class="btn btn-primary">View on Map</a>
+          <button class="btn btn-outline">Remove</button>
+        </div>
+      </article>
+
+      <article class="favourite-card">
+        <div class="card-top">
+          <div>
+            <p class="station-area">Docklands</p>
+            <h3>Convention Centre</h3>
+            <p class="station-address">North Wall Quay, Dublin</p>
+          </div>
+          <span class="station-badge">Saved</span>
+        </div>
+
+        <div class="station-stats">
+          <div class="stat-box">
+            <span class="stat-label">Bikes</span>
+            <span class="stat-value">11</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Stands</span>
+            <span class="stat-value">5</span>
+          </div>
+        </div>
+
+        <div class="station-meta">
+          <p><strong>Status:</strong> Strong bike availability</p>
+          <p><strong>Best for:</strong> Offices / Docklands routes</p>
+        </div>
+
+        <div class="card-actions">
+          <a href="map.html" class="btn btn-primary">View on Map</a>
+          <button class="btn btn-outline">Remove</button>
+        </div>
+      </article>
+
+      <article class="favourite-card">
+        <div class="card-top">
+          <div>
+            <p class="station-area">South Central</p>
+            <h3>St. Stephen’s Green East</h3>
+            <p class="station-address">St. Stephen’s Green, Dublin</p>
+          </div>
+          <span class="station-badge">Saved</span>
+        </div>
+
+        <div class="station-stats">
+          <div class="stat-box">
+            <span class="stat-label">Bikes</span>
+            <span class="stat-value">4</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Stands</span>
+            <span class="stat-value">16</span>
+          </div>
+        </div>
+
+        <div class="station-meta">
+          <p><strong>Status:</strong> Low bike availability</p>
+          <p><strong>Best for:</strong> Park / shopping district</p>
+        </div>
+
+        <div class="card-actions">
+          <a href="map.html" class="btn btn-primary">View on Map</a>
+          <button class="btn btn-outline">Remove</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- OPTIONAL EMPTY STATE -->
+    <section class="empty-state">
+      <div class="empty-box">
+        <div class="empty-icon">⭐</div>
+        <h2>No favourites yet?</h2>
+        <p>
+          Save stations from the map page to build your own quick-access list for everyday journeys.
+        </p>
+        <a href="map.html" class="btn btn-primary">Browse Stations on Map</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>dublinbikes</h3>
+        <p>
+          A web application for viewing Dublin Bikes occupancy and weather information.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="map.html">Map</a>
+        <a href="favourites.html">Favourites</a>
+        <a href="login.html">Login</a>
+      </div>
+    </div>
+
+    <p class="footer-bottom">
+      COMP30830 Software Engineering Project
+    </p>
+  </footer>
+
+</body>
+</html>
