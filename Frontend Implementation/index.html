@@ -4,44 +4,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dublin Bikes | Home</title>
+  <link rel="icon" type="image/png" href="images/favicon_v2.png">
   <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
 </head>
-<body>
+<body id="top">
 
   <!-- HEADER / NAVBAR -->
   <header class="topbar">
-      <div class="brand">
-          <a href="index.html" class="logo-link">
-              <img src="images/bike_logo.png" alt="Dublin Bikes Logo" class="logo-img">
-              <span class="brand-text">dublinbikes</span>
-          </a>
-      </div>
+    <div class="brand">
+      <a href="index.html" class="logo-link">
+        <img src="images/bike_logo.png" alt="Dublin Bikes Logo" class="logo-img">
+        <span class="brand-text">dublinbikes</span>
+      </a>
+    </div>
 
     <nav class="nav">
       <a href="index.html" class="active">Home</a>
       <a href="map.html">Map</a>
       <a href="favourites.html">Favourites</a>
-      <a href="login.html">Login</a>
+      <a href="weather.html">Weather</a>
+
+      <div class="account-dropdown">
+        <button class="account-btn" type="button">
+          Account <span class="arrow">▾</span>
+        </button>
+
+        <div class="dropdown-menu">
+          <a href="login.html">Sign In</a>
+          <a href="signup.html">Sign Up</a>
+        </div>
+      </div>
     </nav>
   </header>
 
-  <!-- HERO SECTION -->
   <main>
+
+    <!-- MAIN PANEL (HERO) -->
     <section class="hero">
       <div class="hero-overlay"></div>
 
       <div class="hero-content">
         <div class="hero-text">
           <p class="hero-tag">Smart cycling across Dublin</p>
-          <h1>Plan your Dublin Bikes journey with live station and weather updates</h1>
+          <h1>Plan your route across Dublin city</h1>
           <p class="hero-description">
-            Check bike station availability, view current weather, explore routes,
-            and make quicker travel decisions across the city with one interactive platform.
+            Check bike availability, view current weather and explore routes.
           </p>
 
           <div class="hero-buttons">
             <a href="map.html" class="btn btn-primary">Open Live Map</a>
-            <a href="login.html" class="btn btn-secondary">Log In</a>
           </div>
         </div>
 
@@ -66,7 +78,7 @@
             </div>
           </div>
           <p class="preview-note">
-            Full live station details, route planning, weather updates and assistant tools are available on the Map page.
+            Full live station details, route planning, weather updates and assistant tools are available.
           </p>
         </div>
       </div>
@@ -76,36 +88,44 @@
     <section class="weather-summary">
       <div class="section-header">
         <h2>Today in Dublin</h2>
-        <p>A quick weather snapshot for cyclists</p>
+        <p>A quick weather snapshot</p>
       </div>
-
+      
       <div class="weather-cards">
         <div class="weather-card">
-          <div class="weather-icon">☀️</div>
+          <div class="feature-icon">
+            <img src="icons/sun.svg" alt="Sun icon">
+          </div>
           <h3>Current</h3>
-          <p class="weather-temp">16°C</p>
-          <p class="weather-text">Sunny and clear</p>
+          <p class="weather-temp" id="homeCurrentTemp">--</p>
+          <p class="weather-text" id="homeCurrentDesc">Loading current weather...</p>
         </div>
-
+        
         <div class="weather-card">
-          <div class="weather-icon">🌡️</div>
+          <div class="feature-icon">
+            <img src="icons/thermometer.svg" alt="Thermometer icon">
+          </div>
           <h3>High / Low</h3>
-          <p class="weather-temp">17°C / 8°C</p>
-          <p class="weather-text">Mild daytime conditions</p>
+          <p class="weather-temp" id="homeHighLowTemp">--</p>
+          <p class="weather-text" id="homeHighLowDesc">Loading forecast...</p>
         </div>
-
+        
         <div class="weather-card">
-          <div class="weather-icon">💨</div>
+          <div class="feature-icon">
+            <img src="icons/wind.svg" alt="Wind icon">
+          </div>
           <h3>Wind</h3>
-          <p class="weather-temp">10 km/h</p>
-          <p class="weather-text">Light cycling wind</p>
+          <p class="weather-temp" id="homeWindSpeed">--</p>
+          <p class="weather-text" id="homeWindDesc">Loading wind conditions...</p>
         </div>
-
+        
         <div class="weather-card">
-          <div class="weather-icon">🌙</div>
+          <div class="feature-icon">
+            <img src="icons/moon.svg" alt="Moon icon">
+          </div>
           <h3>Tonight</h3>
-          <p class="weather-temp">13°C</p>
-          <p class="weather-text">Cooler evening conditions</p>
+          <p class="weather-temp" id="homeTonightTemp">--</p>
+          <p class="weather-text" id="homeTonightDesc">Loading evening forecast...</p>
         </div>
       </div>
     </section>
@@ -113,106 +133,54 @@
     <!-- FEATURES SECTION -->
     <section class="features">
       <div class="section-header">
-        <h2>What the app offers</h2>
-        <p>Built to make city cycling simpler and more informed</p>
+        <h2>Features</h2>
+        <p>Everything you need for your journey</p>
       </div>
 
       <div class="features-grid">
-        <article class="feature-card">
-          <div class="feature-icon">🗺️</div>
-          <h3>Interactive Map</h3>
-          <p>
-            View Dublin Bikes stations across the city and explore live availability directly on the map.
-          </p>
-        </article>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <img src="icons/map.svg" alt="Map icon">
+          </div>
+          <h3>Live Map</h3>
+          <p>View all Dublin Bikes stations and their availability in real time.</p>
+        </div>
 
-        <article class="feature-card">
-          <div class="feature-icon">🚲</div>
-          <h3>Live Station Data</h3>
-          <p>
-            Check the number of bikes and stands available before you travel to a station.
-          </p>
-        </article>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <img src="icons/weather.svg" alt="Weather icon">
+          </div>
+          <h3>Weather Insights</h3>
+          <p>Plan your journeys based on current and forecasted weather conditions.</p>
+        </div>
 
-        <article class="feature-card">
-          <div class="feature-icon">🌤️</div>
-          <h3>Weather Information</h3>
-          <p>
-            See current weather conditions to help plan a more comfortable journey.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">📍</div>
-          <h3>Journey Planning</h3>
-          <p>
-            Compare routes and station options to choose the most convenient path through Dublin.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">⭐</div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <img src="icons/star.svg" alt="Star icon">
+          </div>
           <h3>Favourites</h3>
-          <p>
-            Save your commonly used stations for faster access and easier daily travel.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">🤖</div>
-          <h3>Integrated Assistant</h3>
-          <p>
-            Use the chatbot feature on the map page for extra guidance and user support.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="how-it-works">
-      <div class="section-header">
-        <h2>How it works</h2>
-        <p>Three simple steps to get moving</p>
-      </div>
-
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3>Open the map</h3>
-          <p>Browse bike stations and check what is available nearby.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3>Check conditions</h3>
-          <p>Review weather and station details before starting your journey.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3>Plan your route</h3>
-          <p>Choose your destination and travel more confidently through the city.</p>
+          <p>Save your most-used stations for quick and easy access.</p>
         </div>
       </div>
     </section>
 
-    <!-- CTA SECTION -->
-    <section class="cta-section">
-      <div class="cta-box">
-        <h2>Ready to explore Dublin Bikes?</h2>
-        <p>
-          Head to the live map to view station data, route options, and real-time weather updates.
-        </p>
-        <a href="map.html" class="btn btn-primary">Go to Map</a>
+    <!-- MAP PREVIEW SECTION -->
+    <section class="home-map-preview">
+      <div class="home-map-preview-card">
+        <img src="images/map-preview.png" alt="Dublin Bikes map preview" class="home-map-image">
+        <a href="map.html" class="home-map-button">
+          Go to Map
+        </a>
       </div>
     </section>
+
   </main>
 
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
-        <h3>dublinbikes</h3>
+        <a href="#top" class="footer-top-link">dublinbikes</a>
         <p>
           A web application for viewing Dublin Bikes occupancy and weather information.
         </p>
@@ -222,7 +190,7 @@
         <a href="index.html">Home</a>
         <a href="map.html">Map</a>
         <a href="favourites.html">Favourites</a>
-        <a href="login.html">Login</a>
+        <a href="weather.html">Weather</a>
       </div>
     </div>
 

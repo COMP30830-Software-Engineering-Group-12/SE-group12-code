@@ -4,26 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dublin Bikes | Login</title>
+  <link rel="icon" type="image/png" href="images/favicon_v2.png">
   <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
 </head>
-<body>
+<body id="top">
 
-  <!-- HEADER / NAVBAR -->
-  <header class="topbar">
-    <div class="brand">
-      <a href="index.html" class="logo-link">
-        <img src="images/bike_logo.png" alt="Dublin Bikes Logo" class="logo-img">
-        <span class="brand-text">dublinbikes</span>
-      </a>
+<!-- HEADER / NAVBAR -->
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="logo-link">
+      <img src="images/bike_logo.png" alt="Dublin Bikes Logo" class="logo-img" />
+      <span class="brand-text">dublinbikes</span>
+    </a>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="map.html">Map</a>
+    <a href="favourites.html">Favourites</a>
+    <a href="weather.html">Weather</a>
+
+    <div class="account-dropdown">
+      <button class="account-btn" type="button">
+          Account <span class="arrow">▾</span>
+      </button>
+
+      <div class="dropdown-menu">
+        <a href="login.html">Sign In</a>
+        <a href="signup.html">Sign Up</a>
+      </div>
     </div>
-
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="map.html">Map</a>
-      <a href="favourites.html">Favourites</a>
-      <a href="login.html" class="active">Login</a>
-    </nav>
-  </header>
+  </nav>
+</header>
 
   <main class="login-page">
 
@@ -33,7 +46,7 @@
         <p class="page-tag">Account access</p>
         <h1>Sign in to your Dublin Bikes account</h1>
         <p class="page-description">
-          Access your saved stations, personalise your experience, and use account-based features across the app.
+          Access your saved stations and personalised features across the app.
         </p>
       </div>
     </section>
@@ -42,44 +55,9 @@
     <section class="login-section">
       <div class="login-layout">
 
-        <!-- LEFT SIDE -->
-        <div class="login-info-card">
-          <h2>Why create an account?</h2>
-          <p class="login-info-text">
-            Signing in gives you a more personalised Dublin Bikes experience and makes it easier to access features you use regularly.
-          </p>
-
-          <div class="login-benefits">
-            <div class="benefit-item">
-              <div class="benefit-icon">⭐</div>
-              <div>
-                <h3>Save favourites</h3>
-                <p>Keep your most-used stations ready for quick access.</p>
-              </div>
-            </div>
-
-            <div class="benefit-item">
-              <div class="benefit-icon">🗺️</div>
-              <div>
-                <h3>Faster route planning</h3>
-                <p>Store common journeys and get back to the map quickly.</p>
-              </div>
-            </div>
-
-            <div class="benefit-item">
-              <div class="benefit-icon">🔔</div>
-              <div>
-                <h3>Personalised updates</h3>
-                <p>Use account features for a more tailored app experience.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT SIDE -->
         <div class="login-form-card">
           <div class="login-card-header">
-            <h2>Welcome back</h2>
+            <h2>Sign in</h2>
             <p>Enter your details to continue</p>
           </div>
 
@@ -115,18 +93,13 @@
             </button>
           </form>
 
-          <div class="login-divider">
-            <span>or</span>
-          </div>
-
-          <div class="login-alt-actions">
-            <button type="button" class="btn btn-outline social-btn">Continue with Google</button>
-            <button type="button" class="btn btn-outline social-btn">Continue with GitHub</button>
-          </div>
-
           <p class="signup-text">
             Don’t have an account?
-            <a href="#">Create one</a>
+            <a href="signup.html">Create one</a>
+          </p>
+
+          <p class="signup-text">
+            <a href="index.html">Return to home page</a>
           </p>
         </div>
 
@@ -139,7 +112,7 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
-        <h3>dublinbikes</h3>
+        <a href="#top" class="footer-top-link">dublinbikes</a>
         <p>
           A web application for viewing Dublin Bikes occupancy and weather information.
         </p>

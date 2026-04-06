@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dublin Bikes | Sign Up</title>
+  <link rel="icon" type="image/png" href="images/favicon_v2.png">
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body id="top">
+
+<!-- HEADER / NAVBAR -->
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="logo-link">
+      <img src="images/bike_logo.png" alt="Dublin Bikes Logo" class="logo-img" />
+      <span class="brand-text">dublinbikes</span>
+    </a>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="map.html">Map</a>
+    <a href="favourites.html">Favourites</a>
+    <a href="weather.html">Weather</a>
+
+    <div class="account-dropdown">
+      <button class="account-btn" type="button">
+          Account <span class="arrow">▾</span>
+      </button>
+
+      <div class="dropdown-menu">
+        <a href="login.html">Sign In</a>
+        <a href="signup.html">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+  <main class="signup-page">
+
+    <!-- PAGE INTRO -->
+    <section class="signup-hero">
+      <div class="signup-hero-content">
+        <p class="page-tag">Create account</p>
+        <h1>Create your Dublin Bikes account</h1>
+        <p class="page-description">
+          Sign up to save favourite stations, personalise your experience, and access account-based features across the app.
+        </p>
+      </div>
+    </section>
+
+    <!-- SIGN UP SECTION -->
+    <section class="signup-section">
+      <div class="signup-layout">
+
+        <!-- LEFT SIDE -->
+        <div class="signup-info-card">
+          <h2>Why sign up?</h2>
+
+          <div class="signup-benefits">
+            <div class="benefit-item">
+              <div class="feature-icon">
+            <img src="icons/star.svg" alt="Star icon">
+          </div>
+              <div>
+                <h3>Save favourites</h3>
+                <p>Keep your most-used bike stations in one place.</p>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="feature-icon">
+            <img src="icons/map.svg" alt="Map icon">
+          </div>
+              <div>
+                <h3>Quick access</h3>
+                <p>Get back to your preferred stations and routes faster.</p>
+              </div>
+            </div>
+
+            <div class="benefit-item">
+              <div class="feature-icon">
+            <img src="icons/lock.svg" alt="Lock icon">
+          </div>
+              <div>
+                <h3>Secure account</h3>
+                <p>Use your own login details to access account features.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="signup-form-card">
+          <div class="signup-card-header">
+            <h2>Create account</h2>
+            <p>Fill in your details to get started</p>
+          </div>
+
+          <form class="signup-form">
+            <label for="fullName">Full name</label>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              placeholder="Enter your full name"
+              required
+            />
+
+            <label for="signupEmail">Email address</label>
+            <input
+              type="email"
+              id="signupEmail"
+              name="signupEmail"
+              placeholder="Enter your email"
+              required
+            />
+
+            <label for="signupPassword">Password</label>
+            <input
+              type="password"
+              id="signupPassword"
+              name="signupPassword"
+              placeholder="Create a password"
+              required
+            />
+
+            <label for="confirmPassword">Confirm password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirm your password"
+              required
+            />
+
+            <button type="submit" class="btn btn-primary login-submit-btn">
+              Create Account
+            </button>
+          </form>
+
+          <p class="signup-text">
+            Already have an account?
+            <a href="login.html">Log in</a>
+          </p>
+
+          <p class="signup-text">
+            <a href="index.html">Return to home page</a>
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="#top" class="footer-top-link">dublinbikes</a>
+        <p>
+          A web application for viewing Dublin Bikes occupancy and weather information.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="map.html">Map</a>
+        <a href="favourites.html">Favourites</a>
+        <a href="login.html">Login</a>
+      </div>
+    </div>
+
+    <p class="footer-bottom">
+      COMP30830 Software Engineering Project
+    </p>
+  </footer>
+
+</body>
+</html>

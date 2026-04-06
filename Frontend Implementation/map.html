@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dublin Bikes | Map</title>
+  <link rel="icon" type="image/png" href="images/favicon_v2.png">
 
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="map-overlay.css" />
 
-  <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -15,7 +16,6 @@
     crossorigin=""
   />
 
-  <!-- Leaflet JS -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -25,7 +25,7 @@
 
   <script src="app.js" defer></script>
 </head>
-<body>
+<body id="top">
 
   <!-- HEADER / NAVBAR -->
   <header class="topbar">
@@ -40,7 +40,18 @@
       <a href="index.html">Home</a>
       <a href="map.html" class="active">Map</a>
       <a href="favourites.html">Favourites</a>
-      <a href="login.html">Login</a>
+      <a href="weather.html">Weather</a>
+
+      <div class="account-dropdown">
+        <button class="account-btn" type="button">
+          Account <span class="arrow">▾</span>
+        </button>
+
+        <div class="dropdown-menu">
+          <a href="login.html">Sign In</a>
+          <a href="signup.html">Sign Up</a>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -49,7 +60,9 @@
     <!-- WEATHER STRIP -->
     <section class="map-weather-strip">
       <div class="weather-main">
-        <div class="weather-icon">☀️</div>
+        <div class="feature-icon">
+          <img src="icons/sun.svg" alt="Sun icon" />
+        </div>
         <div>
           <p class="weather-strip-label">Current Weather</p>
           <h2>16°C</h2>
@@ -77,32 +90,35 @@
     <section class="map-main-section">
       <div class="map-container">
 
-        <!-- JOURNEY PLANNER OVERLAY -->
+        <!-- JOURNEY PLANNER -->
         <div class="map-overlay planner-overlay">
           <div class="panel-section">
             <h2>Journey Planner</h2>
-            <p class="panel-subtext">
-              Search two locations or stations to plan your route.
-            </p>
 
             <form class="route-form">
               <label for="fromInput">From</label>
-              <input
-                type="text"
-                id="fromInput"
-                name="fromInput"
-                placeholder="e.g. Pearse Street"
-                autocomplete="off"
-              />
+              <div class="autocomplete-wrapper">
+                <input
+                  type="text"
+                  id="fromInput"
+                  name="fromInput"
+                  placeholder="Choose starting location..."
+                  autocomplete="off"
+                />
+                <div class="autocomplete-list" id="fromSuggestions"></div>
+              </div>
 
               <label for="toInput">To</label>
-              <input
-                type="text"
-                id="toInput"
-                name="toInput"
-                placeholder="e.g. Parnell Square North"
-                autocomplete="off"
-              />
+              <div class="autocomplete-wrapper">
+                <input
+                  type="text"
+                  id="toInput"
+                  name="toInput"
+                  placeholder="Choose destination..."
+                  autocomplete="off"
+                />
+                <div class="autocomplete-list" id="toSuggestions"></div>
+              </div>
 
               <div class="route-buttons">
                 <button type="button" class="btn btn-primary" id="planRouteBtn">Plan Route</button>
@@ -112,79 +128,10 @@
           </div>
         </div>
 
-        <!-- MAP FILTERS OVERLAY -->
-        <div class="map-overlay filters-overlay">
-          <div class="panel-section">
-            <h3>Map Filters</h3>
-
-            <div class="filter-group">
-              <label for="availabilityFilter">Availability</label>
-              <select id="availabilityFilter">
-                <option value="">All stations</option>
-                <option value="high">High availability</option>
-                <option value="medium">Medium availability</option>
-                <option value="low">Low availability</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <label for="stationSearch">Search station</label>
-              <input
-                type="text"
-                id="stationSearch"
-                placeholder="Enter station name"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- ACTUAL MAP -->
-        <div id="map"></div>
-      </div>
-    </section>
-
-    <!-- DETAILS BELOW MAP -->
-    <section class="map-bottom-panels">
-
-      <!-- TOP ROW: MAIN INFO -->
-      <div class="bottom-panels-row main-info-row">
-        <div class="bottom-panel station-card">
-          <div class="station-card-header">
-            <div>
-              <p class="station-area">Selected Station</p>
-              <h2 id="stationTitle">Parnell Square North</h2>
-              <p id="stationMeta" class="station-address">20 Parnell Square N, Dublin</p>
-            </div>
-            <div class="mini-weather-icon">⛅</div>
-          </div>
-
-          <div class="station-stats station-stats-map">
-            <div class="stat-box">
-              <span class="stat-label">Bikes</span>
-              <span class="stat-value" id="bikesAvail">6</span>
-            </div>
-            <div class="stat-box">
-              <span class="stat-label">Stands</span>
-              <span class="stat-value" id="standsAvail">8</span>
-            </div>
-          </div>
-
-          <div class="station-meta">
-            <p><strong>Status:</strong> Moderate availability</p>
-            <p><strong>Weather:</strong> 16°C, partly cloudy</p>
-          </div>
-
-          <div class="station-card-actions">
-            <a href="favourites.html" class="btn btn-outline">Save to Favourites</a>
-            <button class="btn btn-primary" type="button">Reserve</button>
-          </div>
-        </div>
-
-        <div class="bottom-panel prediction-card">
+        <!-- ML / AVAILABILITY PANEL -->
+        <div class="map-overlay ml-overlay">
           <h3>Availability Trend</h3>
-          <p class="panel-subtext">
-            Placeholder for occupancy chart / ML prediction.
-          </p>
+          <p class="panel-subtext">Placeholder for ML prediction.</p>
 
           <div class="chart-placeholder">
             <div class="chart-bar small"></div>
@@ -201,21 +148,102 @@
             <button class="btn btn-primary" type="button">ML Prediction</button>
           </div>
         </div>
-      </div>
 
-      <!-- SECOND ROW: ROUTE SUMMARY -->
-      <div class="bottom-panels-row secondary-info-row">
-        <div class="bottom-panel route-results-panel">
-          <h3>Route Summary</h3>
+        <!-- ROUTE SUMMARY -->
+        <div class="route-overlay" id="routeOverlay">
+          <h3>Planned Route</h3>
+
           <div id="routeResults">
-            <p>No route selected yet.</p>
-            <ul class="route-steps">
-              <li>Choose a start point</li>
-              <li>Choose a destination</li>
-              <li>Plan your journey</li>
-            </ul>
+            <p>Choose a start and destination station to preview a route.</p>
+          </div>
+
+          <button class="btn btn-primary start-journey-btn" type="button" id="startJourneyBtn">
+            Start Journey
+          </button>
+        </div>
+
+        <!-- STATION CONTROL PANEL -->
+        <div class="station-overlay">
+          <div class="panel-section">
+            <p class="station-area">Station Finder</p>
+            <h2>Selected Station</h2>
+            
+            <div class="filter-group">
+              <div class="autocomplete-wrapper">
+                <input
+                       type="text"
+                       id="stationSearch"
+                       placeholder="Enter station name"
+                       autocomplete="off"
+                       />
+                <div class="autocomplete-list" id="stationSuggestions"></div>
+              </div>
+            </div>
+            
+            <div class="filter-group">
+              <label for="availabilityFilter">Availability</label>
+              <select id="availabilityFilter">
+                <option value="">All stations</option>
+                <option value="high">High availability</option>
+                <option value="medium">Medium availability</option>
+                <option value="low">Low availability</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="station-card-header">
+            <div>
+              <div class="station-title-row">
+                <h2 id="stationTitle">Smithfield North</h2>
+                
+                <button
+                        class="favourite-icon-btn"
+                        id="favouriteToggleBtn"
+                        type="button"
+                        aria-label="Toggle favourite"
+                        title="Save station"
+                        >
+                  <svg
+                       viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg"
+                       >
+                    <path 
+                          d="M12 21s-6.5-4.2-9-7A5 5 0 0 1 12 6a5 5 0 0 1 9 8c-2.5 2.8-9 7-9 7z"
+                    />
+                  </svg>
+                </button>
+                
+              </div>
+              
+              <p id="stationMeta" class="station-address">Smithfield North</p>
+            </div>
+          </div>
+          
+          <div class="station-stats station-stats-map">
+            <div class="stat-box">
+              <span class="stat-label">Bikes</span>
+              <span class="stat-value" id="bikesAvail">2</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Stands</span>
+              <span class="stat-value" id="standsAvail">28</span>
+            </div>
+          </div>
+          
+          <div class="station-meta">
+            <p><strong>Status:</strong> Low bike availability</p>
+            <p><strong>Weather:</strong> 8°C, Broken clouds</p>
+            <p><strong>Total Stands:</strong> 30</p>
+          </div>
+          
+          <div class="station-card-actions">
+            <button class="btn btn-primary" type="button" id="reserveBtn">Reserve</button>
           </div>
         </div>
+
+        <!-- MAP -->
+        <div id="map"></div>
+      
       </div>
     </section>
 
@@ -237,23 +265,18 @@
             <div class="chat-bot-avatar">🤖</div>
             <div>
               <h3>Bike Assistant</h3>
-              <p>Ask about routes, stations or availability</p>
+              <p>Ask about routes, stations, or weather.</p>
             </div>
           </div>
 
-          <button
-            type="button"
-            class="chat-close-btn"
-            id="chatCloseBtn"
-            aria-label="Close chat assistant"
-          >
-            ×
+          <button class="chat-close-btn" id="chatCloseBtn" type="button" aria-label="Close chat">
+            ✕
           </button>
         </div>
 
         <div class="chat-messages">
           <div class="chat-bubble bot">
-            Hello! I can help you explore stations, routes and bike availability.
+            Hi! I can help you explore stations, routes and weather conditions.
           </div>
         </div>
 
@@ -261,14 +284,13 @@
           <input
             type="text"
             id="chatInput"
-            placeholder="Type your message..."
-            aria-label="Type your message"
+            placeholder="Ask a question..."
+            autocomplete="off"
           />
-          <button type="submit" class="chat-send-btn">➤</button>
+          <button class="chat-send-btn" type="submit">➜</button>
         </form>
       </div>
     </section>
-
   </main>
 
 </body>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dublin Bikes | Weather</title>
+  <link rel="icon" type="image/png" href="images/favicon_v2.png">
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body id="top">
+ 
+<!-- HEADER / NAVBAR -->
+<header class="topbar">
+  <div class="brand">
+    <a href="index.html" class="logo-link">
+      <img src="images/bike_logo.png" alt="Dublin Bikes Logo" class="logo-img" />
+      <span class="brand-text">dublinbikes</span>
+    </a>
+  </div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="map.html">Map</a>
+    <a href="favourites.html" >Favourites</a>
+    <a href="weather.html" class="active">Weather</a>
+
+    <div class="account-dropdown">
+      <button class="account-btn" type="button">
+        Account <span class="arrow">▾</span>
+      </button>
+
+      <div class="dropdown-menu">
+        <a href="login.html">Sign In</a>
+        <a href="signup.html">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+</header>
+ 
+  <main class="weather-page">
+ 
+    <!-- MAIN PANEL (HERO) -->
+    <section class="page-hero">
+      <div class="page-hero-content">
+        <span class="page-tag">Dublin Weather</span>
+        <h1>Weather conditions for cyclists</h1>
+        <p class="page-description">
+          Current conditions, hourly outlook, and a 7-day forecast to help you plan
+          your Dublin Bikes journeys with confidence.
+        </p>
+      </div>
+    </section>
+ 
+    <!-- CURRENT CONDITIONS -->
+    <section class="weather-current-section">
+      <div class="section-header">
+        <h2>Current Conditions</h2>
+        <p>Live weather snapshot for Dublin city</p>
+      </div>
+ 
+      <div class="current-conditions-grid">
+ 
+        <!-- MAIN TEMPERATURE CARD -->
+        <div class="current-main-card">
+          <div class="current-main-top">
+            <div class="feature-icon">
+              <img src="icons/sun.svg" alt="Sun icon">
+            </div>
+            <div class="current-temp-block">
+              <span class="current-temp" id="currentTemp">16°C</span>
+              <span class="current-desc" id="currentDesc">Sunny and clear</span>
+            </div>
+          </div>
+          <div class="current-high-low">
+            <span>H: <strong id="tempHigh">17°C</strong></span>
+            <span class="divider-dot">·</span>
+            <span>L: <strong id="tempLow">8°C</strong></span>
+          </div>
+          <p class="current-location">📍 Dublin, Ireland</p>
+        </div>
+ 
+        <!-- MORE DETAILS -->
+        <div class="current-details-grid">
+          <div class="detail-card">
+            <div class="feature-icon">
+            <img src="icons/wind.svg" alt="Wind icon">
+          </div>
+            <span class="detail-label">Wind</span>
+            <span class="detail-value" id="windSpeed">10 km/h</span>
+            <span class="detail-sub">Light breeze</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+            <img src="icons/humidity.svg" alt="Humidity icon">
+          </div>
+            <span class="detail-label">Humidity</span>
+            <span class="detail-value" id="humidity">62%</span>
+            <span class="detail-sub">Moderate</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+            <img src="icons/visibility.svg" alt="Visibility icon">
+          </div>
+            <span class="detail-label">Visibility</span>
+            <span class="detail-value" id="visibility">10 km</span>
+            <span class="detail-sub">Excellent</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+            <img src="icons/thermometer.svg" alt="Temperature icon">
+          </div>
+            <span class="detail-label">Feels Like</span>
+            <span class="detail-value" id="feelsLike">14°C</span>
+            <span class="detail-sub">Slightly cool</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+            <img src="icons/rain.svg" alt="Rain icon">
+          </div>
+            <span class="detail-label">Rain Chance</span>
+            <span class="detail-value" id="rainChance">5%</span>
+            <span class="detail-sub">Very low</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+            <img src="icons/gusts.svg" alt="Gusts icon">
+          </div>
+            <span class="detail-label">Wind Gust</span>
+            <span class="detail-value" id="windGust">18 km/h</span>
+            <span class="detail-sub">Manageable</span>
+          </div>
+        </div>
+ 
+      </div>
+    </section>
+    
+    <!-- EXTRA WEATHER METRICS -->
+    <section class="weather-extra-section">
+      <div class="section-header">
+        <h2>More Weather Details</h2>
+      </div>
+      
+      <div class="weather-extra-grid">
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="icons/sunrise.svg" alt="Sunrise icon">
+          </div>
+          <span class="detail-label">Sunrise</span>
+          <span class="detail-value" id="sunriseTime">07:12</span>
+          <span class="detail-sub">Start of daylight</span>
+        </div>
+        
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="icons/sunset.svg" alt="Sunset icon">
+          </div>
+          <span class="detail-label">Sunset</span>
+          <span class="detail-value" id="sunsetTime">18:22</span>
+          <span class="detail-sub">End of daylight</span>
+        </div>
+        
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="icons/compass.svg" alt="Compass icon">
+          </div>
+          <span class="detail-label">Wind Direction</span>
+          <span class="detail-value" id="windDirection">W</span>
+          <span class="detail-sub">Mostly westerly</span>
+        </div>
+        
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="icons/cloud.svg" alt="Cloud icon">
+          </div>
+          <span class="detail-label">Cloud Cover</span>
+          <span class="detail-value" id="cloudCover">75%</span>
+          <span class="detail-sub">Broken clouds</span>
+        </div>
+        
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="icons/pressure.svg" alt="Pressure icon">
+          </div>
+          <span class="detail-label">Pressure</span>
+          <span class="detail-value" id="pressureValue">1007 hPa</span>
+          <span class="detail-sub">Slightly unsettled</span>
+        </div>
+        
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="icons/bike.svg" alt="Bike icon">
+          </div>
+          <span class="detail-label">Cycling Score</span>
+          <span class="detail-value" id="cyclingScore">8/10</span>
+          <span class="detail-sub">Good riding conditions</span>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- HOURLY FORECAST -->
+    <section class="weather-hourly-section">
+      <div class="section-header">
+        <h2>Hourly Forecast for Today</h2>
+      </div>
+ 
+      <div class="hourly-scroll-wrapper">
+        <div class="hourly-row" id="hourlyRow">
+ 
+          <div class="hourly-card hourly-now">
+            <span class="hourly-time">Now</span>
+            <div class="feature-icon">
+            <img src="icons/sun.svg" alt="Sun icon">
+          </div>
+            <span class="hourly-temp">16°C</span>
+            <span class="hourly-rain">💧 5%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">13:00</span>
+            <div class="feature-icon">
+            <img src="icons/sun_cloud.svg" alt="Mostly Sunny icon">
+          </div>
+            <span class="hourly-temp">17°C</span>
+            <span class="hourly-rain">💧 5%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">14:00</span>
+            <div class="feature-icon">
+            <img src="icons/sun_cloud.svg" alt="Mostly Sunny icon">
+          </div>
+            <span class="hourly-temp">17°C</span>
+            <span class="hourly-rain">💧 8%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">15:00</span>
+            <div class="feature-icon">
+            <img src="icons/sun_dark_cloud.svg" alt="Mostly Cloudy icon">
+          </div>
+            <span class="hourly-temp">16°C</span>
+            <span class="hourly-rain">💧 12%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">16:00</span>
+            <div class="feature-icon">
+            <img src="icons/sun_dark_cloud.svg" alt="Mostly Cloudy icon">
+          </div>
+            <span class="hourly-temp">15°C</span>
+            <span class="hourly-rain">💧 15%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">17:00</span>
+            <div class="feature-icon">
+            <img src="icons/sun_dark_cloud.svg" alt="Mostly Cloudy icon">
+          </div>
+            <span class="hourly-temp">14°C</span>
+            <span class="hourly-rain">💧 20%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">18:00</span>
+            <div class="feature-icon">
+            <img src="icons/sun_dark_cloud.svg" alt="Mostly Cloudy icon">
+          </div>
+            <span class="hourly-temp">13°C</span>
+            <span class="hourly-rain">💧 25%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">19:00</span>
+            <div class="feature-icon">
+            <img src="icons/sun_rain.svg" alt="Light Showers icon">
+          </div>
+            <span class="hourly-temp">12°C</span>
+            <span class="hourly-rain">💧 35%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">20:00</span>
+            <div class="feature-icon">
+            <img src="icons/sun_rain.svg" alt="Light Showers icon">
+          </div>
+            <span class="hourly-temp">11°C</span>
+            <span class="hourly-rain">💧 40%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">21:00</span>
+            <div class="feature-icon">
+            <img src="icons/moon.svg" alt="Moon icon">
+          </div>
+            <span class="hourly-temp">10°C</span>
+            <span class="hourly-rain">💧 20%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">22:00</span>
+            <div class="feature-icon">
+            <img src="icons/moon.svg" alt="Moon icon">
+          </div>
+            <span class="hourly-temp">9°C</span>
+            <span class="hourly-rain">💧 10%</span>
+          </div>
+ 
+          <div class="hourly-card">
+            <span class="hourly-time">23:00</span>
+            <div class="feature-icon">
+            <img src="icons/moon.svg" alt="Moon icon">
+          </div>
+            <span class="hourly-temp">8°C</span>
+            <span class="hourly-rain">💧 5%</span>
+          </div>
+ 
+        </div>
+      </div>
+    </section>
+    
+    
+    <!-- WEATHER TRENDS -->
+    <section class="weather-trends-section">
+      <div class="section-header">
+        <h2>Weather Trends</h2>
+        <p>How conditions will change through the day</p>
+      </div>
+      
+      <div class="weather-trends-grid">
+        <div class="trend-panel">
+          <div class="trend-panel-header">
+            <h3>Temperature Trend</h3>
+            <p>Hourly temperature forecast</p>
+          </div>
+          <div class="chart-placeholder-large" id="temperatureChart">
+            Temperature line chart here
+          </div>
+        </div>
+        
+        <div class="trend-panel">
+          <div class="trend-panel-header">
+            <h3>Rain Probability</h3>
+            <p>Chance of rain across the day</p>
+          </div>
+          <div class="chart-placeholder-large" id="rainChart">
+            Rain probability chart here
+          </div>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- 7-DAY FORECAST -->
+    <section class="weather-forecast-section">
+      <div class="section-header">
+        <h2>7-Day Forecast</h2>
+        <p>Plan your week of cycling ahead</p>
+      </div>
+ 
+      <div class="forecast-grid" id="forecastGrid">
+ 
+        <div class="forecast-card forecast-today">
+          <span class="forecast-day">Today</span>
+          <div class="feature-icon">
+            <img src="icons/sun.svg" alt="Sun icon">
+          </div>
+          <div class="forecast-temps">
+            <span class="forecast-high">17°C</span>
+            <span class="forecast-low">8°C</span>
+          </div>
+          <span class="forecast-desc">Sunny</span>
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: 5%"></div>
+          </div>
+          <span class="forecast-rain-label">5% rain</span>
+        </div>
+ 
+        <div class="forecast-card">
+          <span class="forecast-day">Tue</span>
+          <div class="feature-icon">
+            <img src="icons/sun_cloud.svg" alt="Mostly Sunny icon">
+          </div>
+          <div class="forecast-temps">
+            <span class="forecast-high">15°C</span>
+            <span class="forecast-low">7°C</span>
+          </div>
+          <span class="forecast-desc">Mostly sunny</span>
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: 10%"></div>
+          </div>
+          <span class="forecast-rain-label">10% rain</span>
+        </div>
+ 
+        <div class="forecast-card">
+          <span class="forecast-day">Wed</span>
+          <div class="feature-icon">
+            <img src="icons/sun_dark_cloud.svg" alt="Partly Cloudy icon">
+          </div>
+          <div class="forecast-temps">
+            <span class="forecast-high">13°C</span>
+            <span class="forecast-low">7°C</span>
+          </div>
+          <span class="forecast-desc">Partly cloudy</span>
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: 30%"></div>
+          </div>
+          <span class="forecast-rain-label">30% rain</span>
+        </div>
+ 
+        <div class="forecast-card">
+          <span class="forecast-day">Thu</span>
+          <div class="feature-icon">
+            <img src="icons/rain.svg" alt="Rain Showers icon">
+          </div>
+          <div class="forecast-temps">
+            <span class="forecast-high">11°C</span>
+            <span class="forecast-low">6°C</span>
+          </div>
+          <span class="forecast-desc">Rain showers</span>
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: 75%"></div>
+          </div>
+          <span class="forecast-rain-label">75% rain</span>
+        </div>
+ 
+        <div class="forecast-card">
+          <span class="forecast-day">Fri</span>
+          <div class="feature-icon">
+            <img src="icons/sun_rain.svg" alt="Light Showers icon">
+          </div>
+          <div class="forecast-temps">
+            <span class="forecast-high">12°C</span>
+            <span class="forecast-low">6°C</span>
+          </div>
+          <span class="forecast-desc">Light showers</span>
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: 50%"></div>
+          </div>
+          <span class="forecast-rain-label">50% rain</span>
+        </div>
+ 
+        <div class="forecast-card">
+          <span class="forecast-day">Sat</span>
+          <div class="feature-icon">
+            <img src="icons/sun_dark_cloud.svg" alt="Cloudy Spells icon">
+          </div>
+          <div class="forecast-temps">
+            <span class="forecast-high">14°C</span>
+            <span class="forecast-low">7°C</span>
+          </div>
+          <span class="forecast-desc">Cloudy spells</span>
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: 20%"></div>
+          </div>
+          <span class="forecast-rain-label">20% rain</span>
+        </div>
+ 
+        <div class="forecast-card">
+          <span class="forecast-day">Sun</span>
+          <div class="feature-icon">
+            <img src="icons/sun_cloud.svg" alt="Bright Intervals icon">
+          </div>
+          <div class="forecast-temps">
+            <span class="forecast-high">15°C</span>
+            <span class="forecast-low">8°C</span>
+          </div>
+          <span class="forecast-desc">Bright intervals</span>
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: 15%"></div>
+          </div>
+          <span class="forecast-rain-label">15% rain</span>
+        </div>
+ 
+      </div>
+    </section>
+    
+    
+    <!-- INSIGHT FOR CYCLISTS -->
+    <section class="cycling-insight-section">
+      <div class="section-header">
+        <h2>Cycling Insight</h2>
+        <p>A quick recommendation based on current and forecast conditions</p>
+      </div>
+      
+      <div class="cycling-insight-card">
+        <div class="cycling-insight-top">
+          <div class="feature-icon">
+            <img src="icons/bike.svg" alt="Bike icon">
+          </div>
+          <div>
+            <h3 id="cyclingInsightTitle">Good time to ride</h3>
+            <p id="cyclingInsightText">
+              Light wind and dry conditions make this a strong window for cycling around Dublin.
+            </p>
+          </div>
+        </div>
+        
+        <div class="cycling-insight-meta">
+          <div class="insight-pill">
+            <span class="insight-label">Best Window</span>
+            <span class="insight-value" id="bestRideWindow">13:00 – 17:00</span>
+          </div>
+          <div class="insight-pill">
+            <span class="insight-label">Risk Level</span>
+            <span class="insight-value" id="rideRiskLevel">Low</span>
+          </div>
+          <div class="insight-pill">
+            <span class="insight-label">Recommendation</span>
+            <span class="insight-value" id="rideRecommendation">Bring a light layer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- ACTION BOX -->
+    <section class="action-section">
+      <div class="action-box">
+        <h2>Ready to head out?</h2>
+        <p>Check live bike availability on the map before you go.</p>
+        <a href="map.html" class="btn btn-primary">Open Live Map</a>
+      </div>
+    </section>
+ 
+  </main>
+ 
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="#top" class="footer-top-link">dublinbikes</a>
+        <p>A web application for viewing Dublin Bikes occupancy and weather information.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="map.html">Map</a>
+        <a href="favourites.html">Favourites</a>
+        <a href="weather.html">Weather</a>
+        <a href="login.html">Login</a>
+      </div>
+    </div>
+    <p class="footer-bottom">COMP30830 Software Engineering Project</p>
+  </footer>
+ 
+</body>
+</html>

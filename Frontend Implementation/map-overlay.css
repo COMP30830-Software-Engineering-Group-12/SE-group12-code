@@ -1,0 +1,275 @@
+/* =========================
+  MAP PAGE (FULL-SCREEN OVERLAY) 
+========================= */
+
+.map-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 89px); 
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+/* --- Weather strip --- */
+.map-weather-strip {
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  flex-shrink: 0;
+  z-index: 600;
+  padding: 0.75rem 1.5rem;
+}
+
+.map-main-section {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  position: absolute;
+  inset: 0;
+}
+
+.map-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* =========================
+  OVERLAY PANELS
+========================= */
+
+.map-overlay {
+  position: absolute;
+  z-index: 500;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(26, 150, 50, 0.14);
+  padding: 1rem 1.1rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Journey Planner — top left */
+.planner-overlay {
+  top: 1rem;
+  left: 1rem;
+  width: 300px;
+}
+
+/* ML Panel — top right */
+.ml-overlay {
+  top: 1rem;
+  right: 1rem;
+  width: 300px;
+}
+
+.leaflet-top.leaflet-left {
+  left: calc(1rem + 300px + 0.6rem) !important;
+  top: 1rem !important;
+  margin-top: 0 !important;
+}
+
+.leaflet-top.leaflet-left .leaflet-control {
+  margin-top: 0 !important;
+}
+
+/* =========================
+   STATION INFO PANEL — bottom right-left
+========================= */
+
+.station-overlay {
+  position: absolute;
+  z-index: 500;
+  bottom: 1.5rem;
+  right: 1rem;
+  width: 320px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(26, 150, 50, 0.18);
+  padding: 1.1rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.filters-overlay {
+  display: none;
+}
+
+.station-overlay .panel-section {
+  margin-bottom: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.station-overlay .panel-section h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.8rem;
+}
+
+.station-overlay .filter-group {
+  margin-bottom: 0.9rem;
+}
+
+.station-overlay .filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.station-overlay .filter-group label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: var(--text-dark);
+}
+
+.station-overlay .filter-group input,
+.station-overlay .filter-group select {
+  width: 100%;
+}
+
+.station-overlay .station-card-header h2 {
+  font-size: 1.25rem;
+}
+
+.station-overlay .station-stats {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.station-overlay .stat-box {
+  padding: 0.7rem;
+}
+
+.station-overlay .stat-value {
+  font-size: 1.1rem;
+}
+
+.station-overlay .station-meta {
+  margin-bottom: 0.9rem;
+}
+
+.station-overlay .station-meta p {
+  font-size: 0.9rem;
+}
+
+.station-overlay .station-card-actions {
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.station-overlay .btn {
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* =========================
+  ML PANEL
+========================= */
+
+.ml-overlay h3 {
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.ml-overlay .panel-subtext {
+  font-size: 0.9rem;
+  color: var(--text-medium);
+  margin-bottom: 0.8rem;
+}
+
+.ml-overlay .chart-placeholder {
+  height: 80px;
+  margin-bottom: 0.8rem;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.45rem;
+}
+
+.ml-overlay .chart-bar.taller { height: 70px; }
+.ml-overlay .chart-bar.tall   { height: 58px; }
+.ml-overlay .chart-bar.medium { height: 42px; }
+.ml-overlay .chart-bar.small  { height: 24px; }
+
+.ml-overlay .prediction-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.ml-overlay .btn {
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* =========================
+  ROUTE SUMMARY — bottom left
+========================= */
+
+.route-overlay {
+  position: absolute;
+  z-index: 500;
+  bottom: 1.5rem;
+  left: 1rem;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(26, 150, 50, 0.18);
+  padding: 1.1rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.route-overlay h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.route-overlay .route-steps {
+  font-size: 0.9rem;
+}
+
+.route-overlay #routeResults p {
+  font-size: 0.9rem;
+  color: var(--text-medium);
+  margin-bottom: 0.5rem;
+}
+
+.route-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  font-size: 1rem;
+}
+
+.route-meta span {
+  color: var(--text-medium);
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.start-journey-btn {
+  width: 100%;
+  text-align: center;
+  margin-top: 0.9rem;
+}
+
