@@ -1,16 +1,15 @@
 /* =========================
-  MAP PAGE (FULL-SCREEN OVERLAY) 
+   MAP PAGE — FULL-SCREEN OVERLAY LAYOUT
 ========================= */
 
 .map-page {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 89px); 
+  height: calc(100vh - 89px);
   overflow: hidden;
   padding-bottom: 0;
 }
 
-/* --- Weather strip --- */
 .map-weather-strip {
   width: 100%;
   margin: 0;
@@ -48,7 +47,7 @@
 }
 
 /* =========================
-  OVERLAY PANELS
+   OVERLAY PANELS
 ========================= */
 
 .map-overlay {
@@ -61,24 +60,24 @@
   padding: 1rem 1.1rem;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  max-width: calc(100% - 2rem);
+  transition: all 0.25s ease;
 }
 
-/* Journey Planner — top left */
 .planner-overlay {
   top: 1rem;
   left: 1rem;
-  width: 300px;
+  width: clamp(250px, 24vw, 300px);
 }
 
-/* ML Panel — top right */
 .ml-overlay {
   top: 1rem;
   right: 1rem;
-  width: 300px;
+  width: clamp(250px, 24vw, 300px);
 }
 
 .leaflet-top.leaflet-left {
-  left: calc(1rem + 300px + 0.6rem) !important;
+  left: calc(1rem + clamp(250px, 24vw, 300px) + 0.6rem) !important;
   top: 1rem !important;
   margin-top: 0 !important;
 }
@@ -87,16 +86,20 @@
   margin-top: 0 !important;
 }
 
+.filters-overlay {
+  display: none;
+}
+
 /* =========================
-   STATION INFO PANEL — bottom right-left
+   STATION INFO PANEL
 ========================= */
 
 .station-overlay {
   position: absolute;
   z-index: 500;
-  bottom: 1.5rem;
+  bottom: 1rem;
   right: 1rem;
-  width: 320px;
+  width: clamp(270px, 26vw, 320px);
   background: rgba(255, 255, 255, 0.97);
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -104,10 +107,6 @@
   padding: 1.1rem;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-}
-
-.filters-overlay {
-  display: none;
 }
 
 .station-overlay .panel-section {
@@ -178,7 +177,7 @@
 }
 
 /* =========================
-  ML PANEL
+   ML PANEL CONTENT
 ========================= */
 
 .ml-overlay h3 {
@@ -218,15 +217,15 @@
 }
 
 /* =========================
-  ROUTE SUMMARY — bottom left
+   ROUTE SUMMARY
 ========================= */
 
 .route-overlay {
   position: absolute;
   z-index: 500;
-  bottom: 1.5rem;
+  bottom: 1rem;
   left: 1rem;
-  width: 280px;
+  width: clamp(250px, 22vw, 280px);
   background: rgba(255, 255, 255, 0.97);
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -273,3 +272,379 @@
   margin-top: 0.9rem;
 }
 
+/* =========================
+   LAPTOP / SMALL DESKTOP FIX
+========================= */
+
+@media (max-width: 1280px) {
+  .planner-overlay {
+    width: 250px;
+  }
+
+  .ml-overlay {
+    width: 250px;
+  }
+
+  .station-overlay {
+    width: 270px;
+  }
+
+  .route-overlay {
+    width: 250px;
+  }
+
+  .leaflet-top.leaflet-left {
+    left: calc(1rem + 250px + 0.6rem) !important;
+  }
+
+  .chat-fab {
+    right: 300px;
+  }
+
+  .chat-widget {
+    right: 300px;
+    width: 360px;
+  }
+}
+
+/* =========================
+   TABLET / NARROW LAPTOP
+========================= */
+
+@media (max-width: 1100px) {
+  .map-page {
+    height: auto;
+    overflow: visible;
+  }
+
+  .map-main-section {
+    height: auto;
+    min-height: unset;
+  }
+
+  .map-container {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1rem;
+    align-items: start;
+    width: min(1400px, 94%);
+    margin: 1rem auto 0 auto;
+    height: auto;
+  }
+
+  #map {
+    position: relative;
+    height: 620px;
+    border-radius: 20px;
+  }
+
+  .planner-overlay,
+  .route-overlay {
+    position: static;
+    width: 100%;
+    max-width: none;
+  }
+
+  .ml-overlay,
+  .station-overlay {
+    position: static;
+    width: 100%;
+    max-width: none;
+  }
+
+  .left-map-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .right-map-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .leaflet-top.leaflet-left {
+    left: 12px !important;
+    top: 12px !important;
+  }
+
+  .route-overlay {
+    margin-top: 1rem;
+  }
+
+  .chat-fab {
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .chat-widget {
+    right: 1rem;
+    bottom: 5.5rem;
+    width: min(360px, calc(100vw - 2rem));
+  }
+}
+
+/* =========================
+   SMALLER TABLETS
+========================= */
+
+@media (max-width: 900px) {
+  .map-container {
+    display: flex;
+    flex-direction: column;
+    width: min(1400px, 94%);
+    margin: 1rem auto 0 auto;
+    gap: 1rem;
+  }
+
+  #map {
+    height: 520px;
+  }
+
+  .planner-overlay,
+  .ml-overlay,
+  .route-overlay,
+  .station-overlay {
+    position: static;
+    width: 100%;
+    max-width: none;
+  }
+
+  .map-weather-strip {
+    padding: 0.9rem 1rem;
+  }
+
+  .weather-strip-stats {
+    width: 100%;
+  }
+
+  .weather-pill {
+    flex: 1 1 140px;
+  }
+}
+
+/* =========================
+   SHORT SCREEN FIX
+========================= */
+
+@media (max-width: 850px), (max-height: 700px) {
+  .map-page {
+    height: auto;
+    overflow: visible;
+  }
+
+  .map-main-section {
+    height: auto;
+    min-height: unset;
+  }
+
+  .map-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(1400px, 94%);
+    margin: 1rem auto 0 auto;
+    height: auto;
+  }
+
+  #map {
+    position: relative;
+    height: 560px;
+    border-radius: 20px;
+    order: 2;
+  }
+
+  .left-map-column,
+  .right-map-column {
+    display: contents;
+  }
+
+  .planner-overlay,
+  .ml-overlay,
+  .route-overlay,
+  .station-overlay {
+    position: static;
+    width: 100% !important;
+    max-width: none;
+  }
+
+  .planner-overlay { order: 1; }
+  .ml-overlay { order: 3; }
+  .route-overlay { order: 4; }
+  .station-overlay { order: 5; }
+
+  .leaflet-top.leaflet-left {
+    left: 12px !important;
+    top: 12px !important;
+  }
+
+  .chat-fab {
+    right: 18rem;
+    bottom: 1.25rem;
+  }
+
+  .chat-widget {
+    right: 1rem;
+    bottom: 5.6rem;
+    width: min(340px, calc(100vw - 2rem));
+}
+}
+
+/* =========================
+   COMPACT OVERLAY MODE
+   Keep overlays on the map on smaller laptop screens
+========================= */
+@media (max-width: 1400px), (max-height: 920px) {
+  .map-page {
+    height: calc(100vh - 89px);
+    overflow: hidden;
+  }
+
+  .map-weather-strip {
+    padding: 0.6rem 1rem;
+  }
+
+  .weather-main {
+    gap: 0.75rem;
+  }
+
+  .weather-main h2 {
+    font-size: 1.5rem;
+  }
+
+  .weather-main p:last-child,
+  .weather-strip-label,
+  .pill-label,
+  .pill-value {
+    font-size: 0.9rem;
+  }
+
+  .weather-pill {
+    min-width: 110px;
+    padding: 0.65rem 0.8rem;
+  }
+
+  .planner-overlay {
+    top: 0.8rem;
+    left: 0.8rem;
+    width: 250px;
+    padding: 0.9rem;
+    max-height: calc(100% - 1.6rem);
+    overflow-y: auto;
+  }
+
+  .route-overlay {
+    left: 0.8rem;
+    bottom: 0.8rem;
+    width: 250px;
+    padding: 0.9rem;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  .ml-overlay {
+  top: 1rem;
+  right: 1rem;
+  width: 250px;
+  padding: 0.9rem;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.station-overlay {
+  right: 1rem;
+  bottom: 1rem;
+  width: 270px;
+  padding: 0.95rem;
+  max-height: calc(100% - 250px);
+  overflow-y: auto;
+}
+
+  .map-overlay h2,
+  .station-overlay h2 {
+    font-size: 1.05rem;
+  }
+
+  .map-overlay h3,
+  .route-overlay h3,
+  .ml-overlay h3 {
+    font-size: 0.95rem;
+  }
+
+  .route-form label,
+  .filter-group label {
+    font-size: 0.9rem;
+  }
+
+  .route-form input,
+  .filter-group input,
+  .filter-group select,
+  .chat-input-row input {
+    height: 42px;
+    font-size: 0.92rem;
+  }
+
+  .route-buttons {
+    gap: 0.5rem;
+  }
+
+  .map-overlay .btn,
+  .route-overlay .btn,
+  .station-overlay .btn,
+  .ml-overlay .btn {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.88rem;
+  }
+
+  .station-card-header {
+    margin-bottom: 0.7rem;
+  }
+
+  .station-overlay .station-stats,
+  .station-stats {
+    gap: 0.5rem;
+  }
+
+  .station-overlay .stat-box,
+  .stat-box {
+    padding: 0.7rem;
+  }
+
+  .station-overlay .stat-value,
+  .stat-value {
+    font-size: 1.05rem;
+  }
+
+  .station-overlay .station-meta p,
+  .route-overlay #routeResults p,
+  .route-overlay .route-steps {
+    font-size: 0.88rem;
+  }
+
+  .ml-overlay .chart-placeholder {
+    height: 65px;
+    margin-bottom: 0.65rem;
+  }
+
+  .ml-overlay .chart-bar.taller { height: 56px; }
+  .ml-overlay .chart-bar.tall   { height: 48px; }
+  .ml-overlay .chart-bar.medium { height: 35px; }
+  .ml-overlay .chart-bar.small  { height: 20px; }
+
+  .leaflet-top.leaflet-left {
+    left: calc(0.8rem + 250px + 0.5rem) !important;
+    top: 0.8rem !important;
+  }
+
+  .chat-fab {
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .chat-widget {
+    right: 1rem;
+    bottom: 5.4rem;
+    width: min(340px, calc(100vw - 2rem));
+  }
+}
