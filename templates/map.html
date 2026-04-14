@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dublin Bikes | Map</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon_v2.png') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/map-overlay.css') }}" />
+
+  <script>
+    window.GOOGLE_MAPS_MAP_ID = "{{ google_maps_map_id }}";
+    window.IS_LOGGED_IN = {{ (session.get("user_id") is not none) | tojson }};
+  </script>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&language=en&region=IE&libraries=marker,places"
+    defer></script>
+</head>
+
+<body id="top">
+
+  <!-- HEADER / NAVBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <a href="{{ url_for('home') }}" class="logo-link">
+        <img src="{{ url_for('static', filename='images/bike_logo.png') }}" alt="Dublin Bikes Logo" class="logo-img" />
+        <span class="brand-text">dublinbikes</span>
+      </a>
+    </div>
+
+    <nav class="nav">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('map_page') }}" class="active">Map</a>
+      <a href="{{ url_for('favourite_page') }}">Favourites</a>
+      <a href="{{ url_for('weather_page') }}">Weather</a>
+
+      <div class="account-dropdown">
+        <button class="account-btn" type="button">
+          {% if session.get("user_id") %}
+          {{ session.get("user_full_name") }}
+          {% else %}
+          Account
+          {% endif %}
+          <span class="arrow">▾</span>
+        </button>
+
+        <div class="dropdown-menu">
+          {% if session.get("user_id") %}
+          <a href="{{ url_for('logout_page') }}">Logout</a>
+          {% else %}
+          <a href="{{ url_for('login_page') }}">Sign In</a>
+          <a href="{{ url_for('signup_page') }}">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="map-page">
+
+    <!-- WEATHER STRIP -->
+    <section class="map-weather-strip">
+      <!-- left -->
+      <div class="topbar-left">
+        <div class="weather-main">
+          <div class="feature-icon">
+            <img src="{{ current_weather.icon_url }}" alt="Weather icon" />
+          </div>
+          <div>
+            <p class="weather-strip-label">Current Weather</p>
+            <h2>
+              {{ current_weather.temp if current_weather and current_weather.temp is not none else '--' }}°C
+            </h2>
+            <p>
+              {{ current_weather.weather_description|capitalize if current_weather and
+              current_weather.weather_description
+              else 'Weather unavailable' }} in Dublin
+            </p>
+          </div>
+        </div>
+
+        <div class="weather-strip-stats">
+          <div class="weather-pill">
+            <span class="pill-label">High / Low</span>
+            <span class="pill-value">
+              {{ current_weather.temp_max | round | int if current_weather and current_weather.temp_max is not none else
+              '--' }}°C
+              /
+              {{ current_weather.temp_min | round | int if current_weather and current_weather.temp_min is not none else
+              '--' }}°C
+            </span>
+          </div>
+
+          <div class="weather-pill">
+            <span class="pill-label">Wind</span>
+            <span class="pill-value">
+              {{ current_weather.wind_speed | round | int if current_weather and current_weather.wind_speed is not none
+              else '--' }} km/h
+            </span>
+          </div>
+
+          <div class="weather-pill">
+            <span class="pill-label">Evening</span>
+            <span class="pill-value">13°C</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- middle -->
+      <div class="station-highlight-card">
+        <div class="station-card-header">
+          <div>
+            <div class="station-title-row">
+              <h2 id="stationTitle">Smithfield North</h2>
+
+              <button class="favourite-icon-btn" id="favouriteToggleBtn" type="button" aria-label="Toggle favourite"
+                title="Save station">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 21s-6.5-4.2-9-7A5 5 0 0 1 12 6a5 5 0 0 1 9 8c-2.5 2.8-9 7-9 7z" />
+                </svg>
+              </button>
+            </div>
+
+            <p id="stationMeta" class="station-address">Smithfield North</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- right：bikes / stands / status -->
+      <div class="topbar-right">
+        <div class="station-stats station-stats-map">
+          <div class="stat-box">
+            <span class="stat-label">Bikes</span>
+            <span class="stat-value" id="bikesAvail">2</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Stands</span>
+            <span class="stat-value" id="standsAvail">28</span>
+          </div>
+        </div>
+
+        <div class="station-meta">
+          <p><strong>Status:</strong> Low bike availability</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAP MAIN SECTION -->
+    <section class="map-main-section">
+      <div class="map-container">
+
+        <!-- JOURNEY PLANNER -->
+        <div class="map-overlay planner-overlay">
+          <div class="panel-section">
+            <h2>Journey Planner</h2>
+
+            <form class="route-form">
+              <label for="fromInput">From</label>
+              <div class="autocomplete-wrapper">
+                <div class="from-input-row">
+                  <input type="text" id="fromInput" name="fromInput" placeholder="Choose starting location..."
+                    autocomplete="off" />
+
+                  <button type="button" id="useCurrentLocationBtn" class="location-icon-btn"
+                    aria-label="Use my current location" title="Use my current location">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="12" cy="12" r="3.5"></circle>
+                      <path d="M12 2v3"></path>
+                      <path d="M12 19v3"></path>
+                      <path d="M2 12h3"></path>
+                      <path d="M19 12h3"></path>
+                      <circle cx="12" cy="12" r="9"></circle>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="autocomplete-list" id="fromSuggestions"></div>
+              </div>
+
+              <label for="toInput">To</label>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="toInput" name="toInput" placeholder="Choose destination..." autocomplete="off" />
+                <div class="autocomplete-list" id="toSuggestions"></div>
+              </div>
+
+              <div class="route-buttons">
+                <button type="button" class="btn btn-primary" id="planRouteBtn">Plan Route</button>
+                <button type="reset" class="btn btn-outline">Clear</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ML / AVAILABILITY PANEL -->
+        <div class="map-overlay ml-overlay">
+          <h3>Availability Trend</h3>
+          <p class="panel-subtext">Placeholder for ML prediction.</p>
+
+          <div class="chart-placeholder">
+            <div class="chart-bar small"></div>
+            <div class="chart-bar medium"></div>
+            <div class="chart-bar medium"></div>
+            <div class="chart-bar tall"></div>
+            <div class="chart-bar medium"></div>
+            <div class="chart-bar taller"></div>
+            <div class="chart-bar tall"></div>
+          </div>
+
+          <div class="prediction-actions">
+            <button class="btn btn-outline" type="button">Forecast</button>
+            <button class="btn btn-primary" type="button">ML Prediction</button>
+          </div>
+        </div>
+
+        <!-- STATION CONTROL PANEL -->
+        <div class="station-overlay station-filter-bar">
+          <div class="panel-section">
+            <div class="station-filter-row">
+              <div class="filter-bar-title">Filter</div>
+
+              <div class="filter-group">
+                <label for="stationSearch">Selected Station</label>
+                <div class="autocomplete-wrapper">
+                  <input type="text" id="stationSearch" placeholder="Enter station name" autocomplete="off" />
+                  <div class="autocomplete-list" id="stationSuggestions"></div>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <label for="availabilityFilter">Availability</label>
+                <select id="availabilityFilter">
+                  <option value="">All stations</option>
+                  <option value="high">High availability</option>
+                  <option value="medium">Medium availability</option>
+                  <option value="low">Low availability</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAP -->
+        <div id="map"></div>
+
+      </div>
+    </section>
+
+    <!-- FLOATING CHAT BUTTON -->
+    <button class="chat-fab" id="chatToggleBtn" type="button" aria-label="Open chat assistant">
+      💬
+    </button>
+
+    <!-- COLLAPSIBLE CHAT -->
+    <section class="chat-widget collapsed" id="chatWidget">
+      <div class="chat-window">
+        <div class="chat-header">
+          <div class="chat-bot-info">
+            <div class="chat-bot-avatar">🤖</div>
+            <div>
+              <h3>Bike Assistant</h3>
+              <p>Ask about routes, stations, or weather.</p>
+            </div>
+          </div>
+
+          <button class="chat-close-btn" id="chatCloseBtn" type="button" aria-label="Close chat">
+            ✕
+          </button>
+        </div>
+
+        <div class="chat-messages">
+          <div class="chat-bubble bot">
+            Hi! I can help you explore stations, routes and weather conditions.
+          </div>
+        </div>
+
+        <form class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Ask a question..." autocomplete="off" />
+          <button class="chat-send-btn" type="submit">➜</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+</body>
+
+</html>

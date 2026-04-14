@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dublin Bikes | Sign Up Successful</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon_v2.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <script src="{{ url_for('static', filename='js/signup_success.js') }}" defer></script>
+</head>
+<body>
+
+  <main class="signup-success-page">
+    <section class="signup-success-section">
+      <div class="signup-success-card">
+        <h1>Registration Successful</h1>
+        <p>Your account has been created successfully.</p>
+        <p>You will be redirected to the sign in page in <span id="countdown">5</span> seconds.</p>
+        <p>
+          If you are not redirected automatically,
+          <a href="{{ url_for('login_page') }}">click here to sign in</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dublin Bikes | Weather</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon_v2.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/weather_style.css') }}" />
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body id="top">
+
+  <!-- HEADER / NAVBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <a href="{{ url_for('home') }}" class="logo-link">
+        <img src="{{ url_for('static', filename='images/bike_logo.png') }}" alt="Dublin Bikes Logo" class="logo-img" />
+        <span class="brand-text">dublinbikes</span>
+      </a>
+    </div>
+
+    <nav class="nav">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('map_page') }}">Map</a>
+      <a href="{{ url_for('favourite_page') }}">Favourites</a>
+      <a href="{{ url_for('weather_page') }}" class="active">Weather</a>
+
+      <div class="account-dropdown">
+        <button class="account-btn" type="button">
+          {% if session.get("user_id") %}
+          {{ session.get("user_full_name") }}
+          {% else %}
+          Account
+          {% endif %}
+          <span class="arrow">▾</span>
+        </button>
+
+        <div class="dropdown-menu">
+          {% if session.get("user_id") %}
+          <a href="{{ url_for('logout_page') }}">Logout</a>
+          {% else %}
+          <a href="{{ url_for('login_page') }}">Sign In</a>
+          <a href="{{ url_for('signup_page') }}">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="weather-page">
+
+    <!-- MAIN PANEL (HERO) -->
+    <section class="page-hero">
+      <div class="page-hero-content">
+        <span class="page-tag">Dublin Weather</span>
+        <h1>Weather conditions for cyclists</h1>
+        <p class="page-description">
+          Current conditions, hourly outlook, and a 7-day forecast to help you plan
+          your Dublin Bikes journeys with confidence.
+        </p>
+      </div>
+    </section>
+
+    <!-- CURRENT CONDITIONS -->
+    <section class="weather-current-section">
+      <div class="section-header">
+        <h2>Current Conditions</h2>
+        <p>Live weather snapshot for Dublin city</p>
+      </div>
+
+      <div class="current-conditions-grid">
+
+        <!-- MAIN TEMPERATURE CARD -->
+        <div class="current-main-card">
+          <div class="current-main-top">
+            <div class="feature-icon">
+              <img src="{{ current_weather.icon_url_big }}" alt="Weather icon">
+            </div>
+            <div class="current-temp-block">
+              <span class="current-temp" id="currentTemp">
+                {{ current_weather.temp | round | int if current_weather and current_weather.temp is not none else '--'
+                }}°C
+              </span>
+              <span class="current-desc" id="currentDesc">
+                {{ current_weather.weather_description|capitalize if current_weather and
+                current_weather.weather_description else 'Unavailable' }}
+              </span>
+            </div>
+          </div>
+          <div class="current-high-low">
+            <span>H:
+              <strong id="tempHigh">
+                {{ current_weather.temp_max | round | int if current_weather and current_weather.temp_max is not none
+                else '--' }}°C
+              </strong>
+            </span>
+            <span class="divider-dot">·</span>
+            <span>L:
+              <strong id="tempLow">
+                {{ current_weather.temp_min | round | int if current_weather and current_weather.temp_min is not none
+                else '--' }}°C
+              </strong>
+            </span>
+          </div>
+          <p class="current-location">📍 Dublin, Ireland</p>
+        </div>
+
+        <!-- MORE DETAILS -->
+        <div class="current-details-grid">
+          <div class="detail-card">
+            <div class="feature-icon">
+              <img src="{{ url_for('static', filename='icons/wind.svg') }}" alt="Wind icon">
+            </div>
+            <span class="detail-label">Wind</span>
+            <span class="detail-value" id="windSpeed">
+              {{ current_weather.wind_speed | round | int if current_weather and current_weather.wind_speed is not none
+              else '--' }} km/h
+            </span>
+            <span class="detail-sub">Light breeze</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+              <img src="{{ url_for('static', filename='icons/humidity.svg') }}" alt="Humidity icon">
+            </div>
+            <span class="detail-label">Humidity</span>
+            <span class="detail-value" id="humidity">
+              {{ current_weather.humidity if current_weather and current_weather.humidity is not none else '--' }}%
+            </span>
+            <span class="detail-sub">Moderate</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+              <img src="{{ url_for('static', filename='icons/visibility.svg') }}" alt="Visibility icon">
+            </div>
+            <span class="detail-label">Visibility</span>
+            <span class="detail-value" id="visibility">
+              {% if current_weather and current_weather.visibility is not none %}
+              {{ (current_weather.visibility / 1000) | round(1) }} km
+              {% else %}
+              --
+              {% endif %}
+            </span>
+            <span class="detail-sub">Excellent</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+              <img src="{{ url_for('static', filename='icons/thermometer.svg') }}" alt="Temperature icon">
+            </div>
+            <span class="detail-label">Feels Like</span>
+            <span class="detail-value" id="feelsLike">
+              {{ current_weather.feels_like | round | int if current_weather and current_weather.feels_like is not none
+              else '--' }}°C
+            </span>
+            <span class="detail-sub">Slightly cool</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+              <img src="{{ url_for('static', filename='icons/rain.svg') }}" alt="Rain icon">
+            </div>
+            <span class="detail-label">Wind Degree</span>
+            <span class="detail-value" id="wind_deg">
+              {{ current_weather.wind_deg | round | int if current_weather and current_weather.wind_deg is not none
+              else '--' }}°
+            </span>
+            <span class="detail-sub">The wind direction</span>
+          </div>
+          <div class="detail-card">
+            <div class="feature-icon">
+              <img src="{{ url_for('static', filename='icons/gusts.svg') }}" alt="Gusts icon">
+            </div>
+            <span class="detail-label">Wind Gust</span>
+            <span class="detail-value" id="windGust">18 km/h</span>
+            <span class="detail-sub">Manageable</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- EXTRA WEATHER METRICS -->
+    <section class="weather-extra-section">
+      <div class="section-header">
+        <h2>More Weather Details</h2>
+      </div>
+
+      <div class="weather-extra-grid">
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="{{ url_for('static', filename='icons/sunrise.svg') }}" alt="Sunrise icon">
+          </div>
+          <span class="detail-label">Sunrise</span>
+          <span class="detail-value" id="sunriseTime">07:12</span>
+          <span class="detail-sub">Start of daylight</span>
+        </div>
+
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="{{ url_for('static', filename='icons/sunset.svg') }}" alt="Sunset icon">
+          </div>
+          <span class="detail-label">Sunset</span>
+          <span class="detail-value" id="sunsetTime">18:22</span>
+          <span class="detail-sub">End of daylight</span>
+        </div>
+
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="{{ url_for('static', filename='icons/compass.svg') }}" alt="Compass icon">
+          </div>
+          <span class="detail-label">Wind Direction</span>
+          <span class="detail-value" id="windDirection">W</span>
+          <span class="detail-sub">Mostly westerly</span>
+        </div>
+
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="{{ url_for('static', filename='icons/cloud.svg') }}" alt="Cloud icon">
+          </div>
+          <span class="detail-label">Cloud Cover</span>
+          <span class="detail-value" id="cloudCover">75%</span>
+          <span class="detail-sub">Broken clouds</span>
+        </div>
+
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="{{ url_for('static', filename='icons/pressure.svg') }}" alt="Pressure icon">
+          </div>
+          <span class="detail-label">Pressure</span>
+          <span class="detail-value" id="pressureValue">1007 hPa</span>
+          <span class="detail-sub">Slightly unsettled</span>
+        </div>
+
+        <div class="detail-card">
+          <div class="feature-icon">
+            <img src="{{ url_for('static', filename='icons/bike.svg') }}" alt="Bike icon">
+          </div>
+          <span class="detail-label">Cycling Score</span>
+          <span class="detail-value" id="cyclingScore">8/10</span>
+          <span class="detail-sub">Good riding conditions</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOURLY FORECAST -->
+    <section class="weather-hourly-section">
+      <div class="section-header">
+        <h2>Hourly Forecast for Today</h2>
+      </div>
+
+      <div class="hourly-scroll-wrapper">
+        <div class="hourly-row" id="hourlyRow">
+
+          {% if hourly_forecast %}
+          {% for hour in hourly_forecast %}
+          <div class="hourly-card {% if loop.first %}hourly-now{% endif %}">
+            <span class="hourly-time">
+              {% if loop.first %}
+              Now
+              {% else %}
+              {{ hour.dt_txt[11:16] if hour.dt_txt else "--:--" }}
+              {% endif %}
+            </span>
+
+            <div class="feature-icon">
+              <img src="{{ hour.icon_url if hour.icon_url else url_for('static', filename='icons/cloud.svg') }}"
+                alt="{{ hour.weather_description if hour.weather_description else 'Weather icon' }}">
+            </div>
+
+            <span class="hourly-temp">
+              {{ hour.temp | round | int if hour.temp is not none else "--" }}°C
+            </span>
+
+            <span class="hourly-rain">
+              💧 {{ ((hour.prob or 0) * 100) | round | int }}%
+            </span>
+          </div>
+          {% endfor %}
+          {% else %}
+          <div class="hourly-card">
+            <span class="hourly-time">--</span>
+            <div class="feature-icon">
+              <img src="{{ url_for('static', filename='icons/cloud.svg') }}" alt="Weather icon">
+            </div>
+            <span class="hourly-temp">--°C</span>
+            <span class="hourly-rain">💧 --%</span>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- WEATHER TRENDS -->
+    <section class="weather-trends-section">
+      <div class="section-header">
+        <h2>Weather Trends</h2>
+        <p>How conditions will change through the day</p>
+      </div>
+
+      <div class="weather-trends-grid">
+        <div class="trend-panel">
+          <div class="trend-panel-header">
+            <h3>Temperature Trend</h3>
+            <p>Hourly temperature forecast</p>
+          </div>
+          <div class="chart-placeholder-large">
+            <canvas id="temperatureChart"></canvas>
+          </div>
+        </div>
+
+        <div class="trend-panel">
+          <div class="trend-panel-header">
+            <h3>Rain Probability</h3>
+            <p>Chance of rain across the day</p>
+          </div>
+          <div class="chart-placeholder-large">
+            <canvas id="rainChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7-DAY FORECAST -->
+    <section class="weather-forecast-section">
+      <div class="section-header">
+        <h2>7-Day Forecast</h2>
+        <p>Plan your week of cycling ahead</p>
+      </div>
+
+      <div class="forecast-grid" id="forecastGrid">
+
+        {% if daily_forecast %}
+        {% for day in daily_forecast %}
+        {% set rain_pct = ((day.rain_probability if day.rain_probability is not none else 0) * 100) | round | int %}
+
+        <div class="forecast-card {% if loop.first %}forecast-today{% endif %}">
+          <span class="forecast-day">
+            {{ day.day_label if day.day_label else "--" }}
+          </span>
+
+          <div class="feature-icon">
+            <img src="{{ day.icon_url if day.icon_url else url_for('static', filename='icons/cloud.svg') }}"
+              alt="{{ day.weather_description if day.weather_description else 'Weather icon' }}">
+          </div>
+
+          <div class="forecast-temps">
+            <span class="forecast-high">
+              {{ day.temp_max | round | int if day.temp_max is not none else "--" }}°C
+            </span>
+            <span class="forecast-low">
+              {{ day.temp_min | round | int if day.temp_min is not none else "--" }}°C
+            </span>
+          </div>
+
+          <span class="forecast-desc">
+            {{ day.weather_description|capitalize if day.weather_description else "Unavailable" }}
+          </span>
+
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: {{ rain_pct }}%"></div>
+          </div>
+
+          <span class="forecast-rain-label">{{ rain_pct }}% rain</span>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="forecast-card">
+          <span class="forecast-day">--</span>
+          <div class="feature-icon">
+            <img src="{{ url_for('static', filename='icons/cloud.svg') }}" alt="Weather icon">
+          </div>
+          <div class="forecast-temps">
+            <span class="forecast-high">--°C</span>
+            <span class="forecast-low">--°C</span>
+          </div>
+          <span class="forecast-desc">Unavailable</span>
+          <div class="forecast-rain-bar">
+            <div class="forecast-rain-fill" style="width: 0%"></div>
+          </div>
+          <span class="forecast-rain-label">--% rain</span>
+        </div>
+        {% endif %}
+
+      </div>
+    </section>
+
+
+    <!-- INSIGHT FOR CYCLISTS -->
+    <section class="cycling-insight-section">
+      <div class="section-header">
+        <h2>Cycling Insight</h2>
+        <p>A quick recommendation based on current and forecast conditions</p>
+      </div>
+
+      <div class="cycling-insight-card">
+        <div class="cycling-insight-top">
+          <div class="feature-icon">
+            <img src="{{ url_for('static', filename='icons/bike.svg') }}" alt="Bike icon">
+          </div>
+          <div>
+            <h3 id="cyclingInsightTitle">Good time to ride</h3>
+            <p id="cyclingInsightText">
+              Light wind and dry conditions make this a strong window for cycling around Dublin.
+            </p>
+          </div>
+        </div>
+
+        <div class="cycling-insight-meta">
+          <div class="insight-pill">
+            <span class="insight-label">Best Window</span>
+            <span class="insight-value" id="bestRideWindow">13:00 – 17:00</span>
+          </div>
+          <div class="insight-pill">
+            <span class="insight-label">Risk Level</span>
+            <span class="insight-value" id="rideRiskLevel">Low</span>
+          </div>
+          <div class="insight-pill">
+            <span class="insight-label">Recommendation</span>
+            <span class="insight-value" id="rideRecommendation">Bring a light layer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTION BOX -->
+    <section class="action-section">
+      <div class="action-box">
+        <h2>Ready to head out?</h2>
+        <p>Check live bike availability on the map before you go.</p>
+        <a href="{{ url_for('map_page') }}" class="btn btn-primary">Open Live Map</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="#top" class="footer-top-link">dublinbikes</a>
+        <p>A web application for viewing Dublin Bikes occupancy and weather information.</p>
+      </div>
+      <div class="footer-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('map_page') }}">Map</a>
+        <a href="{{ url_for('favourite_page') }}">Favourites</a>
+        <a href="{{ url_for('weather_page') }}">Weather</a>
+        <a href="{{ url_for('login_page') }}">Login</a>
+      </div>
+    </div>
+    <p class="footer-bottom">COMP30830 Software Engineering Project</p>
+  </footer>
+
+  <script>
+    window.hourlyForecastData = {{ hourly_forecast | tojson }};
+  </script>
+
+  <script src="{{ url_for('static', filename='js/weather_charts.js') }}" defer></script>
+
+</body>
+
+</html>

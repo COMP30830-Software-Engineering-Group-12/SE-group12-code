@@ -16,11 +16,11 @@ logging.basicConfig(
 
 def run_bike():
     db_operations.init_db()
-    db_operations.init_bike__table()
+    db_operations.init_bike_table()
     while True:
         try:
             data = data_scraping.fetch_bike_data()
-            db_operations.insert_bike__table(data)
+            db_operations.insert_bike_table(data)
         except Exception:
             logging.error("Bike job error:\n%s", traceback.format_exc())
         time.sleep(300)

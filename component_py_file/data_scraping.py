@@ -1,10 +1,8 @@
 #This file will focusing on data scraping
 
 import requests
-from . import dbinfo
-#import dbinfo
+from component_py_file import dbinfo
 import json
-import logging
 
 def fetch_bike_data():
     try:
@@ -15,11 +13,17 @@ def fetch_bike_data():
         #save data
         bike_data = response.json()
 
-        #print("Request successful!")
+        print("Request successful!")
         return bike_data
 
-    except Exception as e:
-        logging.error("fetch_bike_data failed: %s", e)
+    except requests.exceptions.HTTPError as e:
+        print("HTTP error occurred:", e)
+    except requests.exceptions.ConnectionError:
+        print("Network connection error")
+    except requests.exceptions.Timeout:
+        print("Request timed out")
+    except requests.exceptions.RequestException as e:
+        print("Other request error:", e)
     #if there is any error, return None
     return None
 
@@ -33,11 +37,17 @@ def fetch_bike_data_by_station(station_number):
         #save data
         station_data = response.json()
 
-        #print("Request successful!")
+        print("Request successful!")
         return station_data
 
-    except Exception as e:
-        logging.error("fetch_bike_data_by_station failed: %s", e)
+    except requests.exceptions.HTTPError as e:
+        print("HTTP error occurred:", e)
+    except requests.exceptions.ConnectionError:
+        print("Network connection error")
+    except requests.exceptions.Timeout:
+        print("Request timed out")
+    except requests.exceptions.RequestException as e:
+        print("Other request error:", e)
     #if there is any error, return None
     return None
 
@@ -51,11 +61,17 @@ def fetch_weather_forecast_data_hourly():
         #save data
         weather_data = response.json()
 
-        #print("Request successful!")
+        print("Request successful!")
         return weather_data
 
-    except Exception as e:
-        logging.error("fetch_weather_forecast_data_hourly failed: %s", e)
+    except requests.exceptions.HTTPError as e:
+        print("HTTP error occurred:", e)
+    except requests.exceptions.ConnectionError:
+        print("Network connection error")
+    except requests.exceptions.Timeout:
+        print("Request timed out")
+    except requests.exceptions.RequestException as e:
+        print("Other request error:", e)
     #if there is any error, return None
     return None
 
@@ -68,11 +84,17 @@ def fetch_weather_forecast_data_daily():
         #save data
         weather_data = response.json()
 
-        #print("Request successful!")
+        print("Request successful!")
         return weather_data
 
-    except Exception as e:
-        logging.error("fetch_weather_forecast_data_daily failed: %s", e)
+    except requests.exceptions.HTTPError as e:
+        print("HTTP error occurred:", e)
+    except requests.exceptions.ConnectionError:
+        print("Network connection error")
+    except requests.exceptions.Timeout:
+        print("Request timed out")
+    except requests.exceptions.RequestException as e:
+        print("Other request error:", e)
     #if there is any error, return None
     return None
 
@@ -85,11 +107,17 @@ def fetch_weather_current_data():
         #save data
         weather_data = response.json()
 
-        #print("Request successful!")
+        print("Request successful!")
         return weather_data
 
-    except Exception as e:
-        logging.error("fetch_weather_current_data failed: %s", e)
+    except requests.exceptions.HTTPError as e:
+        print("HTTP error occurred:", e)
+    except requests.exceptions.ConnectionError:
+        print("Network connection error")
+    except requests.exceptions.Timeout:
+        print("Request timed out")
+    except requests.exceptions.RequestException as e:
+        print("Other request error:", e)
     #if there is any error, return None
     return None
     

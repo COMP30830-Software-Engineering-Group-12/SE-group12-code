@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dublin Bikes | Favourites</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon_v2.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+
+<body id="top">
+
+  <!-- HEADER / NAVBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <a href="{{ url_for('home') }}" class="logo-link">
+        <img src="{{ url_for('static', filename='images/bike_logo.png') }}" alt="Dublin Bikes Logo" class="logo-img" />
+        <span class="brand-text">dublinbikes</span>
+      </a>
+    </div>
+
+    <nav class="nav">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('map_page') }}">Map</a>
+      <a href="{{ url_for('favourite_page') }}" class="active">Favourites</a>
+      <a href="{{ url_for('weather_page') }}">Weather</a>
+
+      <div class="account-dropdown">
+        <button class="account-btn" type="button">
+          {% if session.get("user_id") %}
+          {{ session.get("user_full_name") }}
+          {% else %}
+          Account
+          {% endif %}
+          <span class="arrow">▾</span>
+        </button>
+
+        <div class="dropdown-menu">
+          {% if session.get("user_id") %}
+          <a href="{{ url_for('logout_page') }}">Logout</a>
+          {% else %}
+          <a href="{{ url_for('login_page') }}">Sign In</a>
+          <a href="{{ url_for('signup_page') }}">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- PAGE HERO / INTRO -->
+    <section class="page-hero favourites-hero">
+      <div class="page-hero-content">
+        <p class="page-tag">Your Favourites</p>
+        <h1>Keep your favourite stations in one place</h1>
+        <p class="page-description">
+          Quickly check availability for the stations you use the most.
+        </p>
+      </div>
+    </section>
+
+    <!-- FILTER / SEARCH BAR -->
+    <section class="favourites-toolbar">
+      <div class="toolbar-left">
+        <h2>Favourite Stations</h2>
+      </div>
+
+      <div class="toolbar-right">
+        <input type="text" class="station-search" id="favouritesSearch" placeholder="Search favourite stations..." />
+
+        <select class="station-filter" id="favouritesSort">
+          <option value="">Sort by</option>
+          <option value="name">Station Name</option>
+          <option value="bikes">Bikes Available</option>
+          <option value="stands">Stands Available</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- FAVOURITES GRID -->
+    <section class="favourites-grid" id="favouritesGrid"></section>
+
+    <!-- EMPTY GRID (NO FAVOURITES) -->
+    <section class="empty-state" id="emptyState">
+      <div class="empty-box">
+        <div class="feature-icon">
+          <img src="{{ url_for('static', filename='icons/star.svg') }}" alt="Star icon" />
+        </div>
+        <h2>No favourites yet?</h2>
+        <p>
+          Save stations from the map page here.
+        </p>
+        <a href="{{ url_for('map_page') }}" class="btn btn-primary">Browse Stations on Map</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="#top" class="footer-top-link">dublinbikes</a>
+        <p>
+          A web application for viewing Dublin Bikes occupancy and weather information.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('map_page') }}">Map</a>
+        <a href="{{ url_for('favourite_page') }}">Favourites</a>
+        <a href="{{ url_for('login_page') }}">Login</a>
+      </div>
+    </div>
+
+    <p class="footer-bottom">
+      COMP30830 Software Engineering Project
+    </p>
+  </footer>
+
+</body>
+
+</html>

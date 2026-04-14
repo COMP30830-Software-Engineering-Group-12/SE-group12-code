@@ -1,4 +1,4 @@
-from . import dbinfo
+from component_py_file import dbinfo
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import URL
 from datetime import datetime, timedelta, timezone
@@ -38,12 +38,12 @@ def get_engine():
             db_url,
             pool_pre_ping=True,
             pool_recycle=3600,
-            pool_size=4,
-            max_overflow=6,
+            pool_size=3,
+            max_overflow=2,
         )
     return _ENGINE
 
-def init_bike__table():
+def init_bike_table():
 
     engine = get_engine()
 
@@ -83,7 +83,7 @@ def init_bike__table():
         """))
 
 
-def insert_bike__table(data):
+def insert_bike_table(data):
     """
     data: list[dict]
     Writes:
@@ -109,7 +109,7 @@ def insert_bike__table(data):
         lon = float(s["position"]["lng"])
         capacity = int(s.get("bike_stands", 0))
 
-        # last_update in your sample is milliseconds since epoch  [oai_citation:1‡bike_data.txt](sediment://file_00000000eca87246a15634a23c31af78)
+        # last_update in your sample is milliseconds since epoch
         last_update_ms = s.get("last_update")
         if last_update_ms is None:
             # if missing, use "now" UTC
@@ -139,7 +139,7 @@ def insert_bike__table(data):
             "available_stands": available_stands,
         })
 
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=48)
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=48)).replace(tzinfo=None)  # naive
 
     with engine.begin() as conn:
         # 1) upsert into bike_station
@@ -650,3 +650,177 @@ def insert_weather_forecast_daily(data: dict):
             """),
             {"cutoff": cutoff}
         )
+
+
+def init_users_table():
+    """
+    Create users table for:
+      - local signup/login
+      - Google OAuth login
+      - GitHub OAuth login
+
+    Simplified single-table strategy:
+      - one row per user
+      - email is unique
+      - password_hash is nullable for OAuth-only users
+      - provider/provider_user_id store third-party login info if linked
+    """
+
+    engine = get_engine()
+
+    with engine.begin() as conn:
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS users (
+                user_id BIGINT NOT NULL AUTO_INCREMENT,
+                email VARCHAR(255) NOT NULL,
+                full_name VARCHAR(100) NOT NULL,
+                password_hash VARCHAR(255) DEFAULT NULL,
+
+                provider VARCHAR(20) DEFAULT NULL,
+                provider_user_id VARCHAR(100) DEFAULT NULL,
+
+                is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                    ON UPDATE CURRENT_TIMESTAMP,
+                last_login_at DATETIME DEFAULT NULL,
+
+                PRIMARY KEY (user_id),
+                UNIQUE KEY uq_users_email (email),
+                UNIQUE KEY uq_users_provider_user_id (provider, provider_user_id),
+
+                INDEX idx_users_provider (provider),
+                INDEX idx_users_created_at (created_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        """))
+
+
+
+def create_user(email, full_name, password_hash=None, provider=None, provider_user_id=None):
+    """
+    Create a user in the users table.
+
+    Returns:
+        True  -> user created successfully
+        False -> email / provider user already exists
+    """
+
+    engine = get_engine()
+
+    email = (email or "").strip().lower()
+    full_name = (full_name or "").strip()
+    provider = (provider or "").strip().lower() or None
+    provider_user_id = (provider_user_id or "").strip() or None
+
+    if not email or not full_name:
+        return False
+
+    with engine.begin() as conn:
+        # 1. check duplicate email
+        existing_email = conn.execute(
+            text("""
+                SELECT user_id
+                FROM users
+                WHERE email = :email
+                LIMIT 1
+            """),
+            {"email": email}
+        ).fetchone()
+
+        if existing_email:
+            return False
+
+        # 2. check OAuth duplicate
+        if provider and provider_user_id:
+            existing_provider_user = conn.execute(
+                text("""
+                    SELECT user_id
+                    FROM users
+                    WHERE provider = :provider
+                      AND provider_user_id = :provider_user_id
+                    LIMIT 1
+                """),
+                {
+                    "provider": provider,
+                    "provider_user_id": provider_user_id
+                }
+            ).fetchone()
+
+            if existing_provider_user:
+                return False
+
+        # 3. insert user
+        conn.execute(
+            text("""
+                INSERT INTO users (
+                    email,
+                    full_name,
+                    password_hash,
+                    provider,
+                    provider_user_id
+                )
+                VALUES (
+                    :email,
+                    :full_name,
+                    :password_hash,
+                    :provider,
+                    :provider_user_id
+                )
+            """),
+            {
+                "email": email,
+                "full_name": full_name,
+                "password_hash": password_hash,
+                "provider": provider,
+                "provider_user_id": provider_user_id
+            }
+        )
+
+    return True
+
+
+
+def init_favourites_table():
+    """
+    Create favourites table:
+    - store user favourite bike stations
+    - user_id + station_number is unique
+    - both user_id and station_number are foreign keys
+    """
+
+    engine = get_engine()
+
+    with engine.begin() as conn:
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS favourites (
+                favourite_id BIGINT NOT NULL AUTO_INCREMENT,
+
+                user_id BIGINT NOT NULL,
+                station_number INT NOT NULL,
+
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+                PRIMARY KEY (favourite_id),
+
+                -- prevent duplicate favourites
+                UNIQUE KEY uq_user_station (user_id, station_number),
+
+                -- indexes
+                INDEX idx_user_id (user_id),
+                INDEX idx_station_number (station_number),
+
+                -- foreign key: users
+                CONSTRAINT fk_favourites_user
+                    FOREIGN KEY (user_id)
+                    REFERENCES users(user_id)
+                    ON DELETE CASCADE,
+
+                -- foreign key: bike_station
+                CONSTRAINT fk_favourites_station
+                    FOREIGN KEY (station_number)
+                    REFERENCES bike_station(station_number)
+                    ON DELETE CASCADE
+
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        """))
