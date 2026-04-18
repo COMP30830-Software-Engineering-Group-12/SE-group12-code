@@ -1,11 +1,11 @@
 
 #set parameter for bike data requests
-bike_api_key = "7d89effd32d93ebbc1a388d4e59e327dbf805ba6"
+bike_api_key = "hide"
 bike_url = "https://api.jcdecaux.com/vls/v1/stations"
 contract_city = "dublin"
 
 #set parameter for weather data requests
-weather_api_key = "4d4258544066d525a65b31c3501fb9cd"
+weather_api_key = "hide"
 weather_url_forecast_hourly = "https://api.openweathermap.org/data/2.5/forecast"
 weather_url_forecast_daily = "https://api.openweathermap.org/data/2.5/forecast/daily"
 weather_url_current = "https://api.openweathermap.org/data/2.5/weather"
