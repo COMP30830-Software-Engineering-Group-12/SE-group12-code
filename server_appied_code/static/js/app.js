@@ -276,6 +276,7 @@ function selectStation(station) {
   }
 
   updateFavouriteButtonState();
+  loadPredictionForStation(station);
 }
 
 function updateStationMetaBlock(station) {
@@ -445,30 +446,44 @@ function setupChatForm() {
 
   if (!chatForm || !chatInput || !chatMessages) return;
 
-  chatForm.addEventListener("submit", (event) => {
+  chatForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const message = chatInput.value.trim();
     if (!message) return;
 
     appendChatBubble(message, "user", chatMessages);
-
-    let reply = "I can help with station availability, routes, and map exploration.";
-
-    if (selectedStation && message.toLowerCase().includes("station")) {
-      reply = `${formatStationName(selectedStation.name)} currently has ${selectedStation.available_bikes} bikes and ${selectedStation.available_bike_stands} free stands.`;
-    } else if (message.toLowerCase().includes("weather")) {
-      const desc = currentWeather?.weather_description ?? "unavailable";
-      const temp =
-        typeof currentWeather?.temp === "number"
-          ? Math.round(currentWeather.temp)
-          : null;
-
-      reply = `Current Dublin weather is ${temp !== null ? `${temp}°C` : "--"} with ${desc}.`;
-    }
-
-    appendChatBubble(reply, "bot", chatMessages);
     chatInput.value = "";
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: message,
+          user_lat: userCurrentLocation?.lat ?? null,
+          user_lng: userCurrentLocation?.lng ?? null,
+          selected_station_id: selectedStation?.number ?? null
+        })
+      });
+
+      const data = await response.json();
+
+      appendChatBubble(
+        data.reply || "Sorry, I couldn't get a response.",
+        "bot",
+        chatMessages
+      );
+    } catch (error) {
+      console.error("Chat error:", error);
+      appendChatBubble(
+        "Sorry, something went wrong.",
+        "bot",
+        chatMessages
+      );
+    }
   });
 }
 
@@ -1443,4 +1458,93 @@ function clearPlannedRoute() {
     marker.map = null;
   });
   routeStepMarkers = [];
+}
+
+/* ----------------------
+  ML
+----------------------- */
+async function fetchPrediction(stationId) {
+  try {
+    const res = await fetch(`/api/prediction?station_id=${stationId}`);
+    if (!res.ok) throw new Error("Prediction failed");
+
+    return await res.json();
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+function renderPredictionChart(predictions, currentBikes) {
+  const container = document.querySelector(".chart-placeholder");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (!predictions || predictions.length === 0) {
+    container.innerHTML = '<p class="prediction-empty">No prediction data</p>';
+    return;
+  }
+
+  const allData = [
+    {
+      dt_txt: "Now",
+      predicted_bikes: currentBikes ?? 0,
+      isCurrent: true
+    },
+    ...predictions.map((p) => ({
+      ...p,
+      isCurrent: false
+    }))
+  ];
+
+  const displayData = allData.slice(0, 12);
+  const maxValue = Math.max(...displayData.map((p) => Number(p.predicted_bikes) || 0), 1);
+
+  displayData.forEach((p) => {
+    const value = Number(p.predicted_bikes) || 0;
+    const heightPercent = (value / maxValue) * 100;
+
+    const item = document.createElement("div");
+    item.className = "prediction-bar-item";
+
+    const label = document.createElement("div");
+    label.className = "prediction-value-label";
+    label.textContent = value;
+
+    const barArea = document.createElement("div");
+    barArea.className = "prediction-bar-area";
+
+    const bar = document.createElement("div");
+    bar.className = "chart-bar";
+    bar.style.height = `${Math.max(heightPercent, 8)}%`;
+
+    if (p.isCurrent) {
+      bar.classList.add("current-bar");
+    } else {
+      bar.classList.add("forecast-bar");
+    }
+
+    bar.title = `${p.dt_txt} → ${value} bikes`;
+
+    barArea.appendChild(bar);
+    item.appendChild(label);
+    item.appendChild(barArea);
+    container.appendChild(item);
+  });
+}
+
+async function loadPredictionForStation(station) {
+  if (!station) return;
+
+  const stationId = station.number;
+
+  const data = await fetchPrediction(stationId);
+
+  if (!data || !data.predictions) {
+    console.error("No prediction data");
+    return;
+  }
+
+  renderPredictionChart(data.predictions, station.available_bikes ?? 0);
 }
