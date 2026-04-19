@@ -1,6 +1,7 @@
 from component_py_file.db_operations import get_engine
 from sqlalchemy import  text
 from werkzeug.security import check_password_hash
+import math
 from datetime import datetime
 
 
@@ -469,3 +470,142 @@ def get_user_favourites(user_id):
         })
 
     return result
+
+
+def get_station_by_id(station_number: int) -> dict:
+    """
+    Get station info from bike_station table by station_number (PK)
+    """
+
+    engine = get_engine()
+
+    sql = text("""
+        SELECT
+            station_number,
+            contract_name,
+            name,
+            address,
+            station_lat,
+            station_lon,
+            capacity
+        FROM bike_station
+        WHERE station_number = :station_number
+        LIMIT 1
+    """)
+
+    with engine.connect() as conn:
+        row = conn.execute(
+            sql,
+            {"station_number": station_number}
+        ).mappings().first()
+
+    return dict(row) if row else None
+
+
+
+
+def get_stations_info():
+    """
+    Return all station static info from bike_station table.
+    Useful for nearest-station calculation.
+    """
+
+    engine = get_engine()
+
+    with engine.connect() as conn:
+        rows = conn.execute(
+            text("""
+                SELECT
+                    station_number,
+                    contract_name,
+                    name,
+                    address,
+                    station_lat,
+                    station_lon,
+                    capacity
+                FROM bike_station
+                ORDER BY station_number;
+            """)
+        ).mappings().all()
+
+    result = []
+    for row in rows:
+        result.append({
+            "station_number": row["station_number"],
+            "contract_name": row["contract_name"],
+            "name": row["name"],
+            "address": row["address"],
+            "position": {
+                "lat": float(row["station_lat"]) if row["station_lat"] is not None else None,
+                "lng": float(row["station_lon"]) if row["station_lon"] is not None else None,
+            },
+            "capacity": row["capacity"],
+        })
+
+    return result
+
+import math
+
+
+def _haversine_distance_km(lat1, lon1, lat2, lon2):
+    """
+    Calculate great-circle distance between two points on Earth in kilometers.
+    """
+    earth_radius_km = 6371.0
+
+    lat1_rad = math.radians(float(lat1))
+    lon1_rad = math.radians(float(lon1))
+    lat2_rad = math.radians(float(lat2))
+    lon2_rad = math.radians(float(lon2))
+
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2) ** 2
+    )
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    return earth_radius_km * c
+
+
+def get_nearest_stations(user_lat, user_lon, limit=3):
+    """
+    Return the nearest bike stations to the user's location.
+
+    Args:
+        user_lat (float): user's latitude
+        user_lon (float): user's longitude
+        limit (int): number of nearest stations to return
+
+    Returns:
+        list[dict]: nearest stations with distance_km added
+    """
+    if user_lat is None or user_lon is None:
+        return []
+
+    stations = get_stations_info()
+    results = []
+
+    for station in stations:
+        station_lat = station.get("station_lat")
+        station_lon = station.get("station_lon")
+
+        if station_lat is None or station_lon is None:
+            continue
+
+        distance_km = _haversine_distance_km(
+            user_lat,
+            user_lon,
+            station_lat,
+            station_lon
+        )
+
+        station_with_distance = dict(station)
+        station_with_distance["distance_km"] = round(distance_km, 3)
+        results.append(station_with_distance)
+
+    results.sort(key=lambda s: s["distance_km"])
+
+    return results[:limit]

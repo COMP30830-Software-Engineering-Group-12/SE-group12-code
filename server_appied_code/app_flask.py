@@ -2,6 +2,8 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for, f
 from component_py_file import dbinfo
 from werkzeug.security import generate_password_hash
 from component_py_file.db_operations import create_user
+from component_py_file.prediction import prediction_by_id
+from component_py_file.gemini_chat import run_gemini_chat
 from component_py_file.db_request import (
     request_current_weather,
     request_hourly_forecast,
@@ -195,5 +197,48 @@ def api_hourly_forecast():
 def api_daily_forecast():
     return jsonify(request_daily_forecast())
 
+@app.route("/api/prediction")
+def api_prediction():
+    station_id = request.args.get("station_id", type=int)
+
+    if not station_id:
+        return jsonify({"error": "station_id required"}), 400
+
+    result = prediction_by_id(station_id)
+    return jsonify(result)
+
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    data = request.get_json(silent=True) or {}
+
+    message = (data.get("message") or "").strip()
+    user_lat = data.get("user_lat")
+    user_lng = data.get("user_lng")
+    selected_station_id = data.get("selected_station_id")
+    user_id = session.get("user_id")
+
+    if not message:
+        return jsonify({
+            "reply": "Please enter a message."
+        }), 400
+
+    try:
+        reply = run_gemini_chat(
+            message=message,
+            user_id=user_id,
+            user_lat=user_lat,
+            user_lng=user_lng,
+            selected_station_id=selected_station_id,
+        )
+
+        return jsonify({
+            "reply": reply
+        })
+    except Exception as e:
+        print("Chat API error:", e)
+        return jsonify({
+            "reply": "Sorry, something went wrong while processing your request."
+        }), 500
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
