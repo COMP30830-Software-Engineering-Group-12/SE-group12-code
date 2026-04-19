@@ -24,6 +24,8 @@
 - **Feature 4**: Route planning and current location detection 🌟
 - **Feature 5**: AI chatbot who help to plan your trip 🌟
 - **Feature 6**: Machine Learning model applied for predicting bike availability for each station 🌟
+- **Feature 7**: A real domain applied(www.segroup12.me). 🌟
+- **Feature 8**: SSL certificated, **https** available. 🌟
 
 ---
 
