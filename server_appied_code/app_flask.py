@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, flash, session
+from datetime import timedelta
 from component_py_file import dbinfo
 from werkzeug.security import generate_password_hash
 from component_py_file.db_operations import create_user
@@ -17,6 +18,7 @@ from component_py_file.db_request import (
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key_here"
+app.permanent_session_lifetime = timedelta(days=30)
 
 @app.route("/")
 def home():
@@ -50,6 +52,7 @@ def login_page():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
+        remember_me = request.form.get("remember_me") == "1"
 
         if not email or not password:
             flash("Please enter both email and password.", "error")
@@ -61,6 +64,7 @@ def login_page():
             flash("Invalid email or password.", "error")
             return render_template("login.html")
 
+        session.permanent = remember_me
         session["user_id"] = user["user_id"]
         session["user_email"] = user["email"]
         session["user_full_name"] = user["full_name"]
@@ -241,4 +245,4 @@ def api_chat():
         }), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(debug=True)
