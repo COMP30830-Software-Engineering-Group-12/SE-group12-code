@@ -43,6 +43,11 @@ def request_current_weather():
     if row is None:
         return None
 
+    cycling_score = calculate_cycling_score(
+    temp=row["temp"],
+    weather_main=row["weather_main"],
+    wind_speed=row["wind_speed"])
+
     return {
         "time_updated": row["time_updated"].isoformat(sep=" ") if row["time_updated"] else None,
         "weather_id": row["weather_id"],
@@ -59,12 +64,68 @@ def request_current_weather():
         "wind_speed": row["wind_speed"],
         "wind_deg": row["wind_deg"],
         "clouds": row["clouds"],
+        "cycling_score": cycling_score,
+        "cycling_label": get_score_label(cycling_score),
         "sunrise": row["sunrise"].isoformat(sep=" ") if row["sunrise"] else None,
         "sunset": row["sunset"].isoformat(sep=" ") if row["sunset"] else None,
         "icon_url": f"https://openweathermap.org/img/wn/{row['weather_icon']}@2x.png" if row["weather_icon"] else None,
         "icon_url_big": f"https://openweathermap.org/img/wn/{row['weather_icon']}@4x.png" if row["weather_icon"] else None,
     }
 
+def calculate_cycling_score(temp, weather_main, wind_speed):
+
+    # --- Temperature (30%) max 3 ---
+    if temp is None:
+        temp_score = 1.5
+    elif 12 <= temp <= 22:
+        temp_score = 3
+    elif 8 <= temp < 12 or 22 < temp <= 26:
+        temp_score = 2.2
+    elif 4 <= temp < 8 or 26 < temp <= 30:
+        temp_score = 1.2
+    else:
+        temp_score = 0.5
+
+    # --- Weather (rain proxy) (40%) max 4 ---
+    if weather_main in ["Clear"]:
+        weather_score = 4
+    elif weather_main in ["Clouds"]:
+        weather_score = 3.5
+    elif weather_main in ["Mist", "Fog"]:
+        weather_score = 2.5
+    elif weather_main in ["Drizzle"]:
+        weather_score = 1.8
+    elif weather_main in ["Rain"]:
+        weather_score = 1
+    elif weather_main in ["Thunderstorm", "Snow"]:
+        weather_score = 0.5
+    else:
+        weather_score = 2  # fallback
+
+    # --- Wind (30%) max 3 ---
+    if wind_speed is None:
+        wind_score = 1.5
+    elif wind_speed <= 3:
+        wind_score = 3
+    elif wind_speed <= 6:
+        wind_score = 2.2
+    elif wind_speed <= 9:
+        wind_score = 1.2
+    else:
+        wind_score = 0.5
+
+    total = temp_score + weather_score + wind_score
+    return round(total, 1)
+
+def get_score_label(score):
+    if score >= 8:
+        return "Excellent"
+    elif score >= 6:
+        return "Good"
+    elif score >= 4:
+        return "Moderate"
+    else:
+        return "Poor"
 
 def request_hourly_forecast(limit=16):
     """
