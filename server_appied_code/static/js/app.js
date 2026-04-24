@@ -1430,11 +1430,34 @@ function updateRouteSummary(routeResults, walking1, cycling, walking2, startStat
   const walk2 = getLegDistanceAndDuration(walking2);
 
   routeResults.innerHTML = `
-    <p><strong>Walk 1:</strong> ${walk1.distanceText} · ${walk1.durationText}</p>
-    <p><strong>Pickup station:</strong> ${formatStationName(startStation.name)}</p>
-    <p><strong>Cycle:</strong> ${bike.distanceText} · ${bike.durationText}</p>
-    <p><strong>Dropoff station:</strong> ${formatStationName(endStation.name)}</p>
-    <p><strong>Walk 2:</strong> ${walk2.distanceText} · ${walk2.durationText}</p>
+    <div class="route-summary-card">
+      <div class="route-summary-item">
+        <span class="route-summary-label">Walk to station</span>
+        <strong>${walk1.durationText}</strong>
+        <small>${walk1.distanceText}</small>
+      </div>
+
+      <div class="route-summary-divider"></div>
+
+      <div class="route-summary-item">
+        <span class="route-summary-label">Cycle</span>
+        <strong>${bike.durationText}</strong>
+        <small>${bike.distanceText}</small>
+      </div>
+
+      <div class="route-summary-divider"></div>
+
+      <div class="route-summary-item">
+        <span class="route-summary-label">Walk to destination</span>
+        <strong>${walk2.durationText}</strong>
+        <small>${walk2.distanceText}</small>
+      </div>
+    </div>
+
+    <div class="route-station-summary">
+      <p><strong>Pickup:</strong> ${formatStationName(startStation.name)}</p>
+      <p><strong>Dropoff:</strong> ${formatStationName(endStation.name)}</p>
+    </div>
   `;
 }
 
