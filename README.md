@@ -1,6 +1,10 @@
-# 🚀 SE - Group 12 - Dublin Bike
+# 🚴‍♂️ Dublin Bikes Smart Planner (SE Group 12)
 
-**SE - Group 12 - Dublin Bike** is a ✨ fantastic ✨ tool for checking bike and weather information and planning your route via bike. 🎉
+A full-stack web application for exploring Dublin Bike stations, checking real-time availability, and planning optimal cycling routes with integrated weather insights and machine learning predictions.
+
+🌐 **Live Demo**: https://www.segroup12.me  
+
+🔒 **HTTPS Enabled (SSL Secured)**
 
 ---
 
@@ -12,27 +16,65 @@
 - [💻 Usage](#-usage)
 - [🧬 Testing](#-testing)
 - [🤝 Contributing](#-contributing)
-- [📝 License](#-license)
 - [📧 Contact](#-contact)
 
 ---
 
-## ✨ Features
-- **Feature 1**: Weather details via OpenWeather 🌟
-- **Feature 2**: Bike stations shows on real map with bike availability information 🚀
-- **Feature 3**: Login function and users can save their favourite bike stations 🔥
-- **Feature 4**: Route planning and current location detection 🌟
-- **Feature 5**: AI chatbot who help to plan your trip 🌟
-- **Feature 6**: Machine Learning model applied for predicting bike availability for each station 🌟
-- **Feature 7**: A real domain applied(www.segroup12.me). 🌟
-- **Feature 8**: SSL certificated, **https** available. 🌟
+## 📌 Overview
+
+This project integrates real-time bike data, weather intelligence, and machine learning to help users make better decisions when using Dublin Bikes.
+
+It demonstrates a complete end-to-end system including:
+
+- Backend API design  
+- Data pipelines  
+- Machine learning integration  
+- Frontend UI/UX  
+- Cloud deployment  
+
+---
+
+## ✨ Key Features
+
+### 🚲 Bike Availability
+- Real-time Dublin Bike station data
+- Interactive Google Maps integration
+- Live bike and stand availability
+
+### 🌦 Weather Integration
+- Current, hourly, and 7-day forecast (OpenWeather API)
+- Weather-aware cycling insights
+
+### 🧭 Route Planning
+- Multi-step route planning:
+  - Walk → Bike → Walk
+- Travel time estimation
+- Current location detection
+
+### 🤖 AI Chatbot
+- Natural language route planning assistant
+- Helps users plan journeys interactively
+
+### 📊 Machine Learning Prediction
+- Predicts future bike availability
+- Random Forest model using weather and time features
+
+### ⭐ User System
+- Login / Signup
+- Save favourite bike stations
+
+### 🌐 Production Deployment
+- Hosted on real domain  
+- Nginx + Gunicorn deployment  
+- Background data collection jobs  
+- SSL certificate enabled  
 
 ---
 
 ## 🚀 Getting Started
 
 ### 🔧 Installation
-To get started with **SE - Group 12 - Dublin Bike**, follow these steps:
+To get started with **Dublin Bikes Smart Planner (SE Group 12)**, follow these steps:
 
 1. Clone the repository:
    ```bash
@@ -97,6 +139,36 @@ sudo systemctl status nginx
 
 ---
 
+## 📁 Project Structure
+server_applied_code/
+│
+├── component_py_file/
+│   ├── db_request.py
+│   ├── prediction.py
+│   ├── data_scraping.py
+│
+├── templates/
+├── static/
+│
+├── app_flask.py
+├── one_time_run.py
+├── long_run_bike_data.py
+├── long_run_weather_data.py
+
+---
+
+## 🧠 Machine Learning Model
+* Model: Random Forest
+* Target: Bike availability
+* Features:
+    * Station ID
+    * Temperature
+    * Humidity
+    * Wind speed
+    * Weather condition
+    * Hour of day
+    * Day of week
+
 ## 🤝 Contributing
 We welcome contributions! 🎉 If you'd like to contribute, please follow these steps:
 
@@ -124,10 +196,22 @@ We welcome contributions! 🎉 If you'd like to contribute, please follow these 
 ## 📧 Contact
 If you have any questions or feedback, feel free to reach out:
 
-- **Email**: jiaqi.yang1@ucdconnect.ie 📩
-             caoimhe.coveneymckeown@ucdconnect.ie 📩
-             casey.liew@ucdconnect.ie 📩
+- **Email**:   
+  jiaqi.yang1@ucdconnect.ie 📩   
+  caoimhe.coveneymckeown@ucdconnect.ie 📩   
+  casey.liew@ucdconnect.ie 📩   
 ---
+
+## ⭐ Highlights
+* Full-stack production deployment
+* Real-time + predictive data system
+* Machine learning integrated into web app
+* Cloud-based architecture
+---
+
+## 📜 License
+This project was developed as part of the COMP30830 Software Engineering module.
+
 
 ### **Key Sections Explained**
 
@@ -141,24 +225,5 @@ If you have any questions or feedback, feel free to reach out:
 6. **Testing**: Explain how to run tests.
 7. **Contributing**: Encourage contributions with clear instructions.
 8. **Contact**: Provide ways for users to reach out for support or feedback.
-
----
-
-### **Emoticons to Use**
-Here are some commonly used emoticons and their meanings:
-- 🚀 **Rocket**: Fast, cutting-edge, or launch-related.
-- ✨ **Sparkles**: Highlighting features or something special.
-- 🔧 **Wrench**: Installation or configuration.
-- ⚙️ **Gear**: Configuration or settings.
-- 💻 **Computer**: Usage or running the project.
-- 🧪 **Test Tube**: Testing or experiments.
-- 🤝 **Handshake**: Contributing or collaboration.
-- 📄 **Page**: Documentation or licenses.
-- 📧 **Email**: Contact information.
-- 🐦 **Bird**: Twitter or social media.
-- 🐛 **Bug**: Issues or bug reports.
-- ❤️ **Heart**: Love or passion for the project.
-
-Check Emojis: [Emoji Cheatsheet](https://github.com/ikatyang/emoji-cheat-sheet)
 
 ---
