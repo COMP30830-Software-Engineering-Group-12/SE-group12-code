@@ -17,6 +17,8 @@ A full-stack web application for exploring Dublin Bike stations, checking real-t
 - [🧬 Testing](#-testing)
 - [🤝 Contributing](#-contributing)
 - [📧 Contact](#-contact)
+- [⭐ Highlights](#-highlights)
+- [📜 License](#-license)
 
 ---
 
@@ -211,19 +213,5 @@ If you have any questions or feedback, feel free to reach out:
 
 ## 📜 License
 This project was developed as part of the COMP30830 Software Engineering module.
-
-
-### **Key Sections Explained**
-
-1. **Project Name with Emoticon**: Use a catchy emoticon to grab attention (e.g., 🚀 for a fast or cutting-edge project).
-2. **Table of Contents**: Helps users navigate the README easily.
-3. **Features**: Highlight the key features with emoticons to make them stand out.
-4. **Getting Started**:
-   - **Installation**: Provide clear steps to set up the project.
-   - **Configuration**: Explain how to configure the project (e.g., environment variables).
-5. **Usage**: Show how to use the project with examples.
-6. **Testing**: Explain how to run tests.
-7. **Contributing**: Encourage contributions with clear instructions.
-8. **Contact**: Provide ways for users to reach out for support or feedback.
 
 ---
