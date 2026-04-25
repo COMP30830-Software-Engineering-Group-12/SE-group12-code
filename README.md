@@ -9,12 +9,15 @@ A full-stack web application for exploring Dublin Bike stations, checking real-t
 ---
 
 ## 📋 Table of Contents
-- [✨ Features](#-features)
+- [📌 Overview](#-overview)
+- [✨ Key Features](#-key-features)
 - [🚀 Getting Started](#-getting-started)
   - [🔧 Installation](#-installation)
   - [⚙️ Configuration](#️-configuration)
 - [💻 Usage](#-usage)
 - [🧬 Testing](#-testing)
+- [📁 Project Structure](#-project-structure)
+- [🧠 Machine Learning Model](#-machine-learning-model)
 - [🤝 Contributing](#-contributing)
 - [📧 Contact](#-contact)
 - [⭐ Highlights](#-highlights)
@@ -142,20 +145,20 @@ sudo systemctl status nginx
 ---
 
 ## 📁 Project Structure
-server_applied_code/
-│
-├── component_py_file/
-│   ├── db_request.py
-│   ├── prediction.py
-│   ├── data_scraping.py
-│
-├── templates/
-├── static/
-│
-├── app_flask.py
-├── one_time_run.py
-├── long_run_bike_data.py
-├── long_run_weather_data.py
+server_applied_code/     
+│     
+├── component_py_file/     
+│   ├── db_request.py     
+│   ├── prediction.py     
+│   ├── data_scraping.py     
+│     
+├── templates/     
+├── static/     
+│     
+├── app_flask.py     
+├── one_time_run.py     
+├── long_run_bike_data.py     
+├── long_run_weather_data.py     
 
 ---
 
