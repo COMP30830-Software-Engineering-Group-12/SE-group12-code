@@ -1,6 +1,6 @@
 # 🚀 SE - Group 12 - Dublin Bike
 
-**SE - Group 12 - Dublin Bike** is a ✨ fantastic ✨ tool for checking bike and weather information and planning your route via bike. 🎉
+**SE - Group 12 - Dublin Bike** is a tool for checking bike and weather information and planning your route via bike. 
 
 ---
 
@@ -94,7 +94,7 @@ sudo systemctl status nginx
 ---
 
 ## 🤝 Contributing
-We welcome contributions! 🎉 If you'd like to contribute, please follow these steps:
+We welcome contributions! If you'd like to contribute, please follow these steps:
 
 1. Fork the repository.
 
