@@ -46,7 +46,7 @@ To get started with **SE - Group 12 - Dublin Bike**, follow these steps:
 
 3. Install the dependencies:
    ```bash
-   npm install  # or pip install -r requirements.txt, etc.
+   conda env create -f environment.yml
    ```
 
 ### ⚙️ Configuration
@@ -58,6 +58,10 @@ All "hide" or "hiden" field need to be replaced with your own apikey and related
 
 ## 💻 Usage
 Here’s how to use **SE - Group 12 - Dublin Bike**:
+0. Active environment
+   ```bash
+   conda activate comp30830
+   ```
 
 1. Run the project: (Make sure you have mysql installed in your server)
    ```bash
@@ -77,7 +81,7 @@ Here’s how to use **SE - Group 12 - Dublin Bike**:
    ```
    (For saving server's memory usage, we only use 2 workers)
 
-For more advanced usage, check out the [documentation](#). 📚
+For more advanced usage, check out the [documentation](https://nginx.org/en/docs/beginners_guide.html). 📚
 
 ---
 
