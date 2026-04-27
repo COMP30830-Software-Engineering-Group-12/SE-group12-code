@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, flash, session
 from datetime import timedelta
+from authlib.integrations.flask_client import OAuth
 from component_py_file import dbinfo
 from werkzeug.security import generate_password_hash
 from component_py_file.db_operations import create_user
@@ -13,12 +14,25 @@ from component_py_file.db_request import (
     verify_user_login,
     add_favourite,
     remove_favourite,
-    get_user_favourites
+    get_user_favourites,
+    get_or_create_oauth_user
 )
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key_here"
 app.permanent_session_lifetime = timedelta(days=30)
+
+oauth = OAuth(app)
+
+google = oauth.register(
+    name="google",
+    client_id=dbinfo.GOOGLE_CLIENT_ID,
+    client_secret=dbinfo.GOOGLE_CLIENT_SECRET,
+    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+    client_kwargs={
+        "scope": "openid email profile"
+    }
+)
 
 @app.route("/")
 def home():
@@ -243,6 +257,43 @@ def api_chat():
         return jsonify({
             "reply": "Sorry, something went wrong while processing your request."
         }), 500
+
+@app.route("/login/google")
+def google_login():
+    redirect_uri = url_for("google_callback", _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@app.route("/auth/google/callback")
+def google_callback():
+    token = google.authorize_access_token()
+    user_info = token.get("userinfo")
+
+    if not user_info:
+        user_info = google.get("https://openidconnect.googleapis.com/v1/userinfo").json()
+
+    email = user_info.get("email")
+    full_name = user_info.get("name")
+    google_id = user_info.get("sub")
+
+    if not email:
+        flash("Google login failed: email not found.", "error")
+        return redirect(url_for("login_page"))
+
+    user = get_or_create_oauth_user(
+        email=email,
+        full_name=full_name,
+        provider="google",
+        provider_user_id=google_id
+    )
+
+    session.permanent = True
+    session["user_id"] = user["user_id"]
+    session["user_email"] = user["email"]
+    session["user_full_name"] = user["full_name"]
+
+    return redirect(url_for("home"))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
