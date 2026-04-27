@@ -670,3 +670,79 @@ def get_nearest_stations(user_lat, user_lon, limit=3):
     results.sort(key=lambda s: s["distance_km"])
 
     return results[:limit]
+
+
+
+def get_or_create_oauth_user(email, full_name, provider, provider_user_id):
+    engine = get_engine()
+
+    email = (email or "").strip().lower()
+    full_name = (full_name or email).strip()
+
+    with engine.begin() as conn:
+        existing = conn.execute(
+            text("""
+                SELECT user_id, email, full_name
+                FROM users
+                WHERE email = :email
+                LIMIT 1
+            """),
+            {"email": email}
+        ).mappings().first()
+
+        if existing:
+            conn.execute(
+                text("""
+                    UPDATE users
+                    SET provider = :provider,
+                        provider_user_id = :provider_user_id,
+                        last_login_at = NOW()
+                    WHERE user_id = :user_id
+                """),
+                {
+                    "provider": provider,
+                    "provider_user_id": provider_user_id,
+                    "user_id": existing["user_id"]
+                }
+            )
+
+            return dict(existing)
+
+        conn.execute(
+            text("""
+                INSERT INTO users (
+                    email,
+                    full_name,
+                    password_hash,
+                    provider,
+                    provider_user_id,
+                    last_login_at
+                )
+                VALUES (
+                    :email,
+                    :full_name,
+                    NULL,
+                    :provider,
+                    :provider_user_id,
+                    NOW()
+                )
+            """),
+            {
+                "email": email,
+                "full_name": full_name,
+                "provider": provider,
+                "provider_user_id": provider_user_id
+            }
+        )
+
+        user = conn.execute(
+            text("""
+                SELECT user_id, email, full_name
+                FROM users
+                WHERE email = :email
+                LIMIT 1
+            """),
+            {"email": email}
+        ).mappings().first()
+
+        return dict(user)

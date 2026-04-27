@@ -7,6 +7,7 @@
   <title>Dublin Bikes | Login</title>
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon_v2.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
   <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 </head>
 
@@ -72,6 +73,16 @@
             <p>Enter your details to continue</p>
           </div>
 
+          <!-- GOOGLE LOGIN -->
+          <a href="{{ url_for('google_login') }}" class="btn btn-google">
+            <img src="https://developers.google.com/identity/images/g-logo.png" />
+            Continue with Google
+          </a>
+
+          <div class="login-divider">
+            <span>or</span>
+          </div>
+
           {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
           <div class="flash-messages">
@@ -81,6 +92,8 @@
           </div>
           {% endif %}
           {% endwith %}
+
+
 
           <form class="login-form" method="POST" action="{{ url_for('login_page') }}" novalidate>
             <label for="email">Email address</label>
@@ -101,6 +114,8 @@
               Log In
             </button>
           </form>
+
+
 
           <p class="signup-text">
             Don’t have an account?
