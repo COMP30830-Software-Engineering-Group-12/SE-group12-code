@@ -66,6 +66,7 @@ It demonstrates a complete end-to-end system including:
 
 ### ⭐ User System
 - Login / Signup
+- Google Login
 - Save favourite bike stations
 
 ### 🌐 Production Deployment
